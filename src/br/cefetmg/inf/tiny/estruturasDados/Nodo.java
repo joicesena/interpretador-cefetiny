@@ -1,4 +1,4 @@
-package br.cefetmg.inf.tiny.estruturasDados.pilhaDinamica;
+package br.cefetmg.inf.tiny.estruturasDados;
 
 public class Nodo {
     private Object conteudo;
