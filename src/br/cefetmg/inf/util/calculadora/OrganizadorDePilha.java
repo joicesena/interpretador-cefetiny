@@ -2,7 +2,7 @@ package br.cefetmg.inf.util.calculadora;
 
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
-import br.cefetmg.inf.tiny.estruturasDados.pilhaDinamica.Pilha;
+import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 
 public final class OrganizadorDePilha {
 

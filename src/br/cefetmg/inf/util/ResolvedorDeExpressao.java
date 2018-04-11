@@ -1,7 +1,7 @@
 package br.cefetmg.inf.util;
 
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
-import br.cefetmg.inf.tiny.estruturasDados.pilhaDinamica.Pilha;
+import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 
 public final class ResolvedorDeExpressao {
 
