@@ -43,7 +43,7 @@ public class Fila implements MetodosFila {
         String saida = "";
         if (this.estaVazia() == false) {
             while (percorre != null) {
-                saida += percorre.getConteudo();
+                saida += percorre.getConteudo() + " ";
                 percorre = percorre.getProximo();
             }
             System.out.println(saida);

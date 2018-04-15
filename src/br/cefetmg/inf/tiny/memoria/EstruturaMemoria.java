@@ -1,5 +1,7 @@
 package br.cefetmg.inf.tiny.memoria;
 
+import br.cefetmg.inf.util.DicionarioComandos;
+
 public class EstruturaMemoria<T> {
     protected VariavelArmazenada primeiraVar;
     protected VariavelArmazenada ultimaVar;
@@ -19,7 +21,7 @@ public class EstruturaMemoria<T> {
 
         } else {
             // a lista não está vazia
-            if (procuraVariavel(nomeVar) == null) {
+            if (procuraVariavel(nomeVar) == null && !DicionarioComandos.verificaSeComando(nomeVar)) {
                 // essa variável ainda nao existe, deve ser criada
                 ultimaVar.setProxNodo(new VariavelArmazenada(nomeVar, valorVar));
                 VariavelArmazenada temp = ultimaVar;
