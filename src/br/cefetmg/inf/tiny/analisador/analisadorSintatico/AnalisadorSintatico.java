@@ -13,7 +13,7 @@ public class AnalisadorSintatico extends Analisador {
     private SeparadorSintatico termosCodigo;
     private boolean temComandoBloco;
     
-    AnalisadorSintatico (String codigo) {
+    public AnalisadorSintatico (String codigo) {
         termosCodigo = new SeparadorSintatico(codigo);
         filaExecucao = new Fila();
         pilhaComandos = new Pilha();
@@ -146,19 +146,26 @@ public class AnalisadorSintatico extends Analisador {
                 i++;
             }
             expressaoImprimir += proxTermo;
-            proxTermo = termosCodigo.retornaProxTermo();
+            
+            if(!pilhaParenteses.estaVazia()){
+                proxTermo = termosCodigo.retornaProxTermo();
+            } else {
+                break;
+            }
         }
         if (!pilhaParenteses.estaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando de impressão foram fechados");
         }
         filaExecucao.insereFila(expressaoImprimir);
         if (analisouParam) {
-            if (!proxTermo.equals("flag")) {
+            if (DicionarioComandos.verificaSeComando(proxTermo)) {
                 termosCodigo.voltaUmTermo();
                 analisa();
-            } else {
+            } else if (proxTermo.equals("flag")) {
                 throw new ExcecaoErroSintatico("O programa não termina como o esperado");
-            }
+            } else {
+                analisa();
+            } 
         } else {
             throw new ExcecaoErroSintatico("Não há parâmetros no comando de impressão");
         }
@@ -230,21 +237,28 @@ public class AnalisadorSintatico extends Analisador {
                 i++;
             }
             expressao += proxTermo;
-            proxTermo = termosCodigo.retornaProxTermo();
+            
+            if(!pilhaParenteses.estaVazia()){
+                proxTermo = termosCodigo.retornaProxTermo();
+            } else {
+                break;
+            }
         }
         if (!pilhaParenteses.estaVazia()) {
-            throw new ExcecaoErroSintatico("Os parênteses do comando readInt não foram fechados");
+            throw new ExcecaoErroSintatico("Nem todos os parênteses no comando readInt foram fechados");
         }
         filaExecucao.insereFila(expressao);
         if (analisouParam) {
-            if (!proxTermo.equals("flag")) {
+            if (DicionarioComandos.verificaSeComando(proxTermo)) {
                 termosCodigo.voltaUmTermo();
                 analisa();
-            } else {
+            } else if (proxTermo.equals("flag")) {
                 throw new ExcecaoErroSintatico("O programa não termina como o esperado");
-            }
+            } else {
+                analisa();
+            } 
         } else {
-            throw new ExcecaoErroSintatico("Não há parâmetros no readInt");
+            throw new ExcecaoErroSintatico("Não há parâmetros no comando readInt");
         }
     }
     //
