@@ -7,7 +7,7 @@ public class Pilha implements MetodosPilha {
     private Nodo topo;
 
     @Override
-    public void empilha(Object conteudo) throws ExcecaoPilhaVazia {
+    public void empilha(Object conteudo) {
         Nodo novo = new Nodo(conteudo, topo);
         topo = novo;
     }
@@ -28,11 +28,7 @@ public class Pilha implements MetodosPilha {
 
     @Override
     public boolean estaVazia() {
-        if (topo == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return topo == null;
     }
 
     @Override
@@ -52,6 +48,7 @@ public class Pilha implements MetodosPilha {
     public void imprimePilha() throws ExcecaoPilhaVazia {
         Nodo percorre = topo;
         String saida = "";
+        //
         if (this.estaVazia() == false) {
             while (percorre != null) {
                 saida += percorre.getConteudo();
@@ -59,7 +56,7 @@ public class Pilha implements MetodosPilha {
             }
             System.out.println(saida);
         } else {
-            throw new ExcecaoPilhaVazia();
+            System.err.println("Impressão de conteúdo requisitada para pilha vazia");
         }
 
     }
@@ -82,12 +79,30 @@ public class Pilha implements MetodosPilha {
                 i++;
             }
         } else {
-            throw new ExcecaoPilhaVazia();
+            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia");
         }
     }
 
     @Override
     public void esvaziaPilha() {
         this.topo = null;
+    }
+
+    public Nodo getTopo() {
+        return topo;
+    }
+
+    public void setTopo(Nodo topo) {
+        this.topo = topo;
+    }
+
+    public void transfereConteudo(Pilha pAux) throws ExcecaoPilhaVazia {
+        if (!this.estaVazia()) {
+            do {
+                pAux.empilha(this.desempilha());
+            } while (this.estaVazia() == false);
+        } else {
+            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia");
+        }
     }
 }

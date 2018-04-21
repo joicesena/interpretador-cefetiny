@@ -1,6 +1,7 @@
 package br.cefetmg.inf.util;
 
-public final class UtilidadesNumericas {
+public final class Conversor {
+
     public static int converterObjectParaInt(Object objetoEntrada) {
         if (objetoEntrada instanceof String) {
             try {
@@ -25,10 +26,5 @@ public final class UtilidadesNumericas {
             return ((Number) objetoEntrada).doubleValue();
         }
         return -1;
-    }
-    
-    public static boolean temCasasDecimais(double objetoEntrada) {
-        objetoEntrada = objetoEntrada - ((Double)objetoEntrada).intValue();
-        return objetoEntrada > 0;
     }
 }
