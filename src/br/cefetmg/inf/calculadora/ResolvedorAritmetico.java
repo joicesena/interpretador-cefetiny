@@ -1,4 +1,4 @@
-package br.cefetmg.inf.util.calculadora;
+package br.cefetmg.inf.calculadora;
 
 import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;

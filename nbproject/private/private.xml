@@ -3,13 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/estruturasDados/Pilha.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/util/calculadora/Calculadora.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/estruturasDados/MetodosPilha.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/util/calculadora/ResolvedorAritmetico.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/util/calculadora/Resolvedor.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/util/calculadora/Constantes.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/test/br/cefetmg/inf/util/calculadora/TesteCalculadora.java</file>
+            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/test/br/cefetmg/inf/calculadora/TesteCalculadora.java</file>
+            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/util/Dicionarios.java</file>
+            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/interfaceConsole/InterfaceConsole.java</file>
+            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/analisador/analisadorSintatico/AnalisadorSintatico.java</file>
+            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/analisador/analisadorSintatico/SeparadorSintatico.java</file>
         </group>
     </open-files>
 </project-private>

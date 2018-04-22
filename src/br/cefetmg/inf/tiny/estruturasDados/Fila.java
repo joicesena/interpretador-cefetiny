@@ -3,14 +3,14 @@ package br.cefetmg.inf.tiny.estruturasDados;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 
 public class Fila implements MetodosFila {
-    
+
     private Nodo inicio;
     private Nodo fim;
-    
+
     @Override
-    public void insereFila(Object conteudo) {        
+    public void insereFila(Object conteudo) {
         Nodo novo = new Nodo(conteudo, null);
-        if(estaVazia()){
+        if (filaVazia()) {
             inicio = novo;
             fim = inicio;
         } else {
@@ -18,12 +18,12 @@ public class Fila implements MetodosFila {
             fim = novo;
         }
     }
-    
+
     @Override
     public Object removeFila() throws ExcecaoFilaVazia {
         Object antigoInicio;
-        
-        if (this.estaVazia() == false) {
+
+        if (this.filaVazia() == false) {
             antigoInicio = inicio.getConteudo();
             inicio = inicio.getProximo();
             return antigoInicio;
@@ -31,17 +31,17 @@ public class Fila implements MetodosFila {
             throw new ExcecaoFilaVazia();
         }
     }
-    
+
     @Override
-    public boolean estaVazia() {
+    public boolean filaVazia() {
         return inicio == null;
     }
-    
+
     @Override
     public void imprimeFila() throws ExcecaoFilaVazia {
         Nodo percorre = inicio;
         String saida = "";
-        if (this.estaVazia() == false) {
+        if (this.filaVazia() == false) {
             while (percorre != null) {
                 saida += percorre.getConteudo() + " ";
                 percorre = percorre.getProximo();

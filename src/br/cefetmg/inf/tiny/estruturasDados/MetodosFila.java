@@ -6,6 +6,6 @@ public interface MetodosFila {
     public void insereFila(Object conteudo);
     public Object removeFila() throws ExcecaoFilaVazia;
     
-    public boolean estaVazia();
+    public boolean filaVazia();
     public void imprimeFila() throws ExcecaoFilaVazia;
 }
