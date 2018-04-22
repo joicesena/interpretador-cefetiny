@@ -1,5 +1,11 @@
 package br.cefetmg.inf.tiny.executor;
 
-public class Executor {
+import br.cefetmg.inf.tiny.estruturasDados.Fila;
+
+public final class Executor {
+    private static Fila filaExecucao = Fila.getInstancia();
     
+    public static void executaPrograma() {
+        
+    }
 }

@@ -1,9 +1,5 @@
 package br.cefetmg.inf.tiny.analisador.analisadorSintatico;
 
-import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class SeparadorSintatico {
 
     private String codigoCompleto;
@@ -13,14 +9,11 @@ public class SeparadorSintatico {
 
     public SeparadorSintatico(String codigoCompleto) {
         this.codigoCompleto = codigoCompleto;
-        try {
-            separa();
-        } catch (ExcecaoFilaVazia ex) {
-            Logger.getLogger(SeparadorSintatico.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        separa();
     }
 
-    private void separa() throws ExcecaoFilaVazia {
+    private void separa() {
         String[] temp;
 
         codigoCompleto = codigoCompleto.replaceAll("[(]", "([");
@@ -60,7 +53,7 @@ public class SeparadorSintatico {
 
     }
 
-    public String retornaProxTermo() throws ExcecaoFilaVazia {
+    public String retornaProxTermo() {
         if ((contadorTermos + 1) <= partesCodigo.length) {
             String retorno = partesCodigo[contadorTermos];
             contadorTermos++;
@@ -74,7 +67,7 @@ public class SeparadorSintatico {
         contadorTermos--;
     }
 
-    public void imprimeTermos() throws ExcecaoFilaVazia {
+    public void imprimeTermos() {
         for (String str : partesCodigo) {
             System.out.println(str);
         }

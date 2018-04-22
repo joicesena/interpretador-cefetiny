@@ -1,7 +1,6 @@
 package br.cefetmg.inf.tiny.analisador.analisadorSintatico;
 
 import br.cefetmg.inf.tiny.analisador.Analisador;
-import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
@@ -16,7 +15,6 @@ public class AnalisadorSintatico extends Analisador {
 
     public AnalisadorSintatico(String codigo) {
         termosCodigo = new SeparadorSintatico(codigo);
-        filaExecucao = new Fila();
         pilhaComandos = new Pilha();
 
         temComandoBloco = false;

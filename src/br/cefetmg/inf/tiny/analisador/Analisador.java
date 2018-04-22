@@ -4,7 +4,7 @@ import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 
 public abstract class Analisador {
-    protected static Fila filaExecucao;
+    protected static Fila filaExecucao = Fila.getInstancia();
     protected static Pilha pilhaComandos;
         
     public static Fila getFilaExecucao() {
