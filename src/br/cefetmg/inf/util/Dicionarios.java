@@ -1,7 +1,7 @@
 package br.cefetmg.inf.util;
 
 public final class Dicionarios {
-
+    
     public static final String[] ALFABETO = new String[]{"a",
                                                          "b",
                                                          "c",

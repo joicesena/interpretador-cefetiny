@@ -4,19 +4,8 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 
 public class Fila implements MetodosFila {
 
-    private static Fila instancia;
     private Nodo inicio;
     private Nodo fim;
-    
-    private Fila() {
-    }
-    
-    public static synchronized Fila getInstancia() {
-        if (instancia == null) {
-            instancia = new Fila();
-        }
-        return instancia;
-    }
 
     @Override
     public void insereFila(Object conteudo) {

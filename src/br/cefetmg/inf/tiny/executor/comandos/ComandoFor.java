@@ -1,4 +1,4 @@
-package br.cefetmg.inf.comandos;
+package br.cefetmg.inf.tiny.executor.comandos;
 
 public class ComandoFor extends Comando{
 
