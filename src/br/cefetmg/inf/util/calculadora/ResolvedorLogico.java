@@ -49,10 +49,10 @@ public final class ResolvedorLogico extends Resolvedor {
                     pAux.empilha(elementoAtual);
                 }
 
-            } while (pBase.estaVazia() == false);
+            } while (pBase.pilhaVazia() == false);
             do {
                 pBase.empilha(pAux.desempilha());
-            } while (pAux.estaVazia() == false);
+            } while (pAux.pilhaVazia() == false);
         }
         return pBase;
     }

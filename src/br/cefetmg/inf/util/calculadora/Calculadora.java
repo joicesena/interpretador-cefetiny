@@ -15,37 +15,28 @@ public final class Calculadora {
     private static Object resultadoExpressao;
 
     static Object iniciaCalculadora(String expressaoBase) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
-        Constantes.inicializaContantes();
-
         variaveis = EstruturaMemoria.getInstancia();
 
         Object resultadoFinal = null;
         //
-        try {
+        //try {
             resultadoFinal = preparaPilha(expressaoBase);
-        } catch (ExcecaoExpressaoInvalida exEI) {
-            System.err.println(exEI.getMessage());
-            System.exit(0);
-        } catch (ExcecaoPilhaVazia  exPV) {
-            System.err.println(exPV.getMessage());
-            System.exit(0);
-        }
+        //} catch (ExcecaoExpressaoInvalida | ExcecaoPilhaVazia e) {
+          //  System.err.println(e.getMessage());
+            //System.exit(0);
+        //}
         return resultadoFinal;
     }
 
     private static Object preparaPilha(String expressaoBase) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         Pilha pOrganizada = new Pilha();
         //
-        try {
-            pOrganizada = formataAnalisaExpressao(expressaoBase);
+        pOrganizada = formataAnalisaExpressao(expressaoBase);
 
-            if (pOrganizada.tamanhoPilha() == 1) {
-                return resolvePilhaTamanhoUnitario(pOrganizada);
-            }
-        } catch (ExcecaoExpressaoInvalida ex) {
-            System.err.println(ex.getMessage());
-            System.exit(0);
+        if (pOrganizada.tamanhoPilha() == 1) {
+            return resolvePilhaTamanhoUnitario(pOrganizada);
         }
+
         return encontraParenteses(pOrganizada);
     }
 
@@ -54,7 +45,7 @@ public final class Calculadora {
         //
         pAnalisada = Organizador.organizaExpressaoNaPilha(expressaoBase);
         pAnalisada.invertePilha();
-        
+
         pAnalisada = AnalisadorExpressao.inicializaAutomato(pAnalisada);
         pAnalisada.invertePilha();
 
@@ -68,7 +59,7 @@ public final class Calculadora {
             Variavel variavel = variaveis.procuraVariavel(pUnitaria.getTopo().getConteudo().toString());
 
             if (variavel.getTipo().equals("int") || variavel.getTipo().equals("double")
-                    || variavel.getTipo().equals("expressao")) {
+                || variavel.getTipo().equals("expressao")) {
                 resultado = Resolvedor.resolveExpressaoCompleta(pUnitaria);
             } else if (variavel.getTipo().equals("string")) {
                 resultado = variavel.getConteudo();
@@ -99,12 +90,12 @@ public final class Calculadora {
             } else {
                 pAux1.empilha(elementoSaida);
             }
-            if (pBase.estaVazia() == true
-                    && pAux2.estaVazia() == true
-                    && pAux1.tamanhoPilha() > 1) {
+            if (pBase.pilhaVazia() == true
+                && pAux2.pilhaVazia() == true
+                && pAux1.tamanhoPilha() > 1) {
                 encontraResultadoExpressao(pAux1);
             }
-        } while (pBase.estaVazia() == false);
+        } while (pBase.pilhaVazia() == false);
 
         return pAux1.desempilha();
     }

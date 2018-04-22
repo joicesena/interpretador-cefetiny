@@ -6,7 +6,7 @@ public interface MetodosPilha {
     public void empilha(Object conteudo)throws ExcecaoPilhaVazia;    
     public Object desempilha()throws ExcecaoPilhaVazia;
     
-    public boolean estaVazia();
+    public boolean pilhaVazia();
     public int tamanhoPilha();
     
     public void imprimePilha()throws ExcecaoPilhaVazia;

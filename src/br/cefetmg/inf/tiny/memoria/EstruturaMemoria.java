@@ -1,7 +1,7 @@
 package br.cefetmg.inf.tiny.memoria;
 
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
-import br.cefetmg.inf.util.DicionarioComandos;
+import br.cefetmg.inf.util.Dicionarios;
 
 public class EstruturaMemoria<Dado> {
 
@@ -29,7 +29,7 @@ public class EstruturaMemoria<Dado> {
 //            System.out.println("variável armazenada! " + primeiraVar.getNomeVar() + " := " + primeiraVar.getDado());
             // a lista não está vazia
         } else {
-            if (procuraVariavel(nomeVar) == null && !DicionarioComandos.verificaSeComando(nomeVar)) {
+            if (procuraVariavel(nomeVar) == null && !Dicionarios.procuraElementoNoDicionario(nomeVar, Dicionarios.LISTA_COMANDOS)) {
                 // essa variável ainda nao existe, deve ser criada
                 ultimaVar.setProxNodo(new Variavel(nomeVar, valorVar, determinaTipo(valorVar)));
                 Variavel temp = ultimaVar;

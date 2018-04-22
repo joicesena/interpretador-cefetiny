@@ -1,5 +1,6 @@
 package br.cefetmg.inf.util.calculadora;
 
+import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
@@ -48,10 +49,10 @@ public final class AnalisadorExpressao {
             }
         } catch (ExcecaoPilhaVazia e) {
             if (contaAbreParenteses == contaFechaParenteses
-                    && (elementoAtual instanceof Double || elementoAtual instanceof Integer
+                && (elementoAtual instanceof Double || elementoAtual instanceof Integer
                     || elementoAtual.equals("true") || elementoAtual.equals("false")
                     || elementoAtual.equals(")") || variaveis.procuraVariavel((String) elementoAtual) != null)
-                    || (elementoAtual.equals("\"") && contaAspas == 2)) {
+                || (elementoAtual.equals("\"") && contaAspas == 2)) {
                 estadoFinal();
                 return;
             } else {
@@ -91,9 +92,9 @@ public final class AnalisadorExpressao {
 
         if (terminaAutomato == true) {
             return;
-        } else if (Constantes.OP_BIN_ARITMETICOS.contains(elementoAtual.toString())) {
+        } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_BIN_ARITMETICOS)) {
             estado6();
-        } else if (Constantes.OP_RELACIONAIS.contains(elementoAtual.toString())) {
+        } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_RELACIONAIS)) {
             estado7();
         } else if (elementoAtual.equals(")")) {
             estado8();
@@ -210,9 +211,9 @@ public final class AnalisadorExpressao {
             return;
         } else if (elementoAtual.equals(")")) {
             estado8();
-        } else if (Constantes.OP_BIN_ARITMETICOS.contains(elementoAtual)) {
+        } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_BIN_ARITMETICOS)) {
             estado6();
-        } else if (Constantes.OP_RELACIONAIS.contains(elementoAtual)) {
+        } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_RELACIONAIS)) {
             estado7();
         } else if (elementoAtual.equals("and") || elementoAtual.equals("or")) {
             estado9();
@@ -237,7 +238,7 @@ public final class AnalisadorExpressao {
     }
 
     //Estado "
-    private static void estado10() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {        
+    private static void estado10() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
         do {
             recebeProximo();
             if (terminaAutomato == true) {
@@ -245,8 +246,9 @@ public final class AnalisadorExpressao {
             } else if (elementoAtual.equals("\"")) {
                 contaAspas++;
             }
-        } while (Constantes.ALFABETO.contains(elementoAtual) || (Constantes.INTEIROS.contains(elementoAtual) 
-                || elementoAtual.equals("\"")));        
+        } while (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.ALFABETO)
+                 || (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.INTEIROS)
+                     || elementoAtual.equals("\"")));
     }
 
     private static void estadoFinal() throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
@@ -254,6 +256,6 @@ public final class AnalisadorExpressao {
     }
 
     private static void estadoErro() throws ExcecaoExpressaoInvalida {
-        throw new ExcecaoExpressaoInvalida("Expressão: Semântica falha");
+        throw new ExcecaoExpressaoInvalida("Expressão: Semântica ou sintaxe falha");
     }
 }

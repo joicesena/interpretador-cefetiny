@@ -6,29 +6,30 @@ import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
-import br.cefetmg.inf.util.DicionarioComandos;
+import br.cefetmg.inf.util.Dicionarios;
 
 public class AnalisadorSintatico extends Analisador {
+
     private String termo;
     private SeparadorSintatico termosCodigo;
     private boolean temComandoBloco;
-    
-    public AnalisadorSintatico (String codigo) {
+
+    public AnalisadorSintatico(String codigo) {
         termosCodigo = new SeparadorSintatico(codigo);
         filaExecucao = new Fila();
         pilhaComandos = new Pilha();
-        
+
         temComandoBloco = false;
-        
+
         analisa();
     }
-    
-    private void analisa () {
+
+    private void analisa() {
         try {
             termo = termosCodigo.retornaProxTermo();
-            if (DicionarioComandos.verificaSeComando(termo)) {
+            if (Dicionarios.procuraElementoNoDicionario(termo, Dicionarios.LISTA_COMANDOS)) {
                 filaExecucao.insereFila(termo);
-                switch (DicionarioComandos.qualComando(termo)) {
+                switch (Dicionarios.qualComando(termo)) {
                     // print
                     case 0:
                         analisaPrint();
@@ -47,8 +48,8 @@ public class AnalisadorSintatico extends Analisador {
                         analisaIf();
                         break;
                     //"then",       4
-    //                case 4:
-    //                    break;
+                    //                case 4:
+                    //                    break;
                     //"else",       5
                     case 5:
                         analisaElse();
@@ -63,8 +64,8 @@ public class AnalisadorSintatico extends Analisador {
                         analisaWhile();
                         break;
                     //"do",         8
-    //                case 8:
-    //                    break;
+                    //                case 8:
+                    //                    break;
                     //"endwhile",   9
                     case 9:
                         analisaEndwhile();
@@ -75,11 +76,11 @@ public class AnalisadorSintatico extends Analisador {
                         analisaFor();
                         break;
                     //"to",         11
-    //                case 11:
-    //                    break;
+                    //                case 11:
+                    //                    break;
                     //"downto",     12
-    //                case 12:
-    //                    break;
+                    //                case 12:
+                    //                    break;
                     //"endfor"      13
                     case 13:
                         analisaEndfor();
@@ -90,7 +91,7 @@ public class AnalisadorSintatico extends Analisador {
                         break;
                 }
             } else {
-                char [] caracteresTermo = termo.toCharArray();
+                char[] caracteresTermo = termo.toCharArray();
                 if (!verificaSeAlfaMin(caracteresTermo[0])) {
                     throw new ExcecaoErroSintatico("Caractere não permitido no início de um comando");
                 } else {
@@ -115,13 +116,13 @@ public class AnalisadorSintatico extends Analisador {
         String expressaoImprimir = "";
         int contadorAnalisados = -1;
         String proxTermo = termosCodigo.retornaProxTermo();
-        char [] caracteresTermo;
+        char[] caracteresTermo;
         Pilha pilhaParenteses = new Pilha();
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("Não há nada depois do comando de impressão");
         }
         int i = 0;
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             // nao encontrou outro comando nem terminou os termos do codigo
             analisouParam = true;
             contadorAnalisados++;
@@ -131,7 +132,7 @@ public class AnalisadorSintatico extends Analisador {
                 if ((contadorAnalisados == 0) && (i == 0)) {
                     // primeiro termo depois do comando
                     // primeiro caractere do primeiro termo
-                    if  (c == '(') {
+                    if (c == '(') {
                         // ele deve ser parênteses
                         pilhaParenteses.empilha("(");
                     } else {
@@ -146,26 +147,26 @@ public class AnalisadorSintatico extends Analisador {
                 i++;
             }
             expressaoImprimir += proxTermo;
-            
-            if(!pilhaParenteses.estaVazia()){
+
+            if (!pilhaParenteses.pilhaVazia()) {
                 proxTermo = termosCodigo.retornaProxTermo();
             } else {
                 break;
             }
         }
-        if (!pilhaParenteses.estaVazia()) {
+        if (!pilhaParenteses.pilhaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando de impressão foram fechados");
         }
         filaExecucao.insereFila(expressaoImprimir);
         if (analisouParam) {
-            if (DicionarioComandos.verificaSeComando(proxTermo)) {
+            if (Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS)) {
                 termosCodigo.voltaUmTermo();
                 analisa();
             } else if (proxTermo.equals("flag")) {
                 throw new ExcecaoErroSintatico("O programa não termina como o esperado");
             } else {
                 analisa();
-            } 
+            }
         } else {
             throw new ExcecaoErroSintatico("Não há parâmetros no comando de impressão");
         }
@@ -183,14 +184,14 @@ public class AnalisadorSintatico extends Analisador {
         String expressao = "";
         String proxTermo = termosCodigo.retornaProxTermo();
         boolean leuPrimeiroCharVar = false;
-        char [] caracteresTermo;
+        char[] caracteresTermo;
         Pilha pilhaParenteses = new Pilha();
         int contadorTermosAnalisados = -1;
         int i = 0;
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("O programa não termina como o esperado");
         }
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             // enquanto não achar outro termo e o código não houver terminado
             analisouParam = true;
             contadorTermosAnalisados++;
@@ -198,65 +199,65 @@ public class AnalisadorSintatico extends Analisador {
             caracteresTermo = proxTermo.toCharArray();
             for (char c : caracteresTermo) {
                 if ((contadorTermosAnalisados == 0) && (i == 0)) {
-                // primeiro termo, primeiro caractere
+                    // primeiro termo, primeiro caractere
                     if (c == '(') {
                         pilhaParenteses.empilha("(");
                     } else {
-                        throw new ExcecaoErroSintatico("O primeiro caractere depois do comando readInt não é um '('");     
+                        throw new ExcecaoErroSintatico("O primeiro caractere depois do comando readInt não é um '('");
                     }
                 } else if ((contadorTermosAnalisados == 0) && (i == 1)) {
-                // primeiro termo, segundo caractere
+                    // primeiro termo, segundo caractere
                     if (verificaSeAlfaMin(c)) {
-                        leuPrimeiroCharVar = true;                    
+                        leuPrimeiroCharVar = true;
                     } else {
-                        throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");     
+                        throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");
                     }
                 } else if ((contadorTermosAnalisados == 1) && (i == 0)) {
-                // segundo termo, primeiro caractere
+                    // segundo termo, primeiro caractere
                     if (leuPrimeiroCharVar == false) {
-                    // se ainda não houver lido o primeiro caractere do nome da variável
+                        // se ainda não houver lido o primeiro caractere do nome da variável
                         if (verificaSeAlfaMin(c)) {
-                            leuPrimeiroCharVar = true;                    
+                            leuPrimeiroCharVar = true;
                         } else {
-                            throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");     
+                            throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");
                         }
                     }
                 } else {
                     if ((contadorTermosAnalisados > 1) && (c != ')')) {
-                        throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");     
+                        throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");
                     }
                     if ((!verificaSeAlfaMin(c)) && (!verificaSeDigito(c))) {
-                    // o caractere não é nem letra nem dígito
+                        // o caractere não é nem letra nem dígito
                         if (c == ')') {
                             pilhaParenteses.desempilha();
                         } else {
-                            throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");     
+                            throw new ExcecaoErroSintatico("Nome da variável no comando readInt é inválido");
                         }
                     }
                 }
                 i++;
             }
             expressao += proxTermo;
-            
-            if(!pilhaParenteses.estaVazia()){
+
+            if (!pilhaParenteses.pilhaVazia()) {
                 proxTermo = termosCodigo.retornaProxTermo();
             } else {
                 break;
             }
         }
-        if (!pilhaParenteses.estaVazia()) {
+        if (!pilhaParenteses.pilhaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando readInt foram fechados");
         }
         filaExecucao.insereFila(expressao);
         if (analisouParam) {
-            if (DicionarioComandos.verificaSeComando(proxTermo)) {
+            if (Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS)) {
                 termosCodigo.voltaUmTermo();
                 analisa();
             } else if (proxTermo.equals("flag")) {
                 throw new ExcecaoErroSintatico("O programa não termina como o esperado");
             } else {
                 analisa();
-            } 
+            }
         } else {
             throw new ExcecaoErroSintatico("Não há parâmetros no comando readInt");
         }
@@ -270,17 +271,17 @@ public class AnalisadorSintatico extends Analisador {
     //
     private void analisaIf() throws ExcecaoErroSintatico, ExcecaoPilhaVazia, ExcecaoFilaVazia {
         boolean analisouParam = false;
-        
+
         String expressaoCondicional = "";
         int contadorAnalisados = -1;
         String proxTermo = termosCodigo.retornaProxTermo();
-        char [] caracteresTermo;
+        char[] caracteresTermo;
         Pilha pilhaParenteses = new Pilha();
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("Não há nada depois do comando if");
         }
         int i;
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             analisouParam = true;
             // nao encontrou outro comando nem terminou os termos do codigo
             contadorAnalisados++;
@@ -290,7 +291,7 @@ public class AnalisadorSintatico extends Analisador {
                 if ((contadorAnalisados == 0) && (i == 0)) {
                     // primeiro termo depois do comando
                     // primeiro caractere do primeiro termo
-                    if  (c == '(') {
+                    if (c == '(') {
                         // ele deve ser parênteses
                         pilhaParenteses.empilha("(");
                     } else {
@@ -307,7 +308,7 @@ public class AnalisadorSintatico extends Analisador {
             expressaoCondicional += proxTermo;
             proxTermo = termosCodigo.retornaProxTermo();
         }
-        if (!pilhaParenteses.estaVazia()) {
+        if (!pilhaParenteses.pilhaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando if foram fechados");
         }
         if (analisouParam) {
@@ -338,7 +339,7 @@ public class AnalisadorSintatico extends Analisador {
     private void analisaElse() throws ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoFilaVazia {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
-        
+
         if (comandoPilha.equals("if")) {
             pilhaComandos.empilha(comandoPilha);
             proxTermo = termosCodigo.retornaProxTermo();
@@ -362,7 +363,7 @@ public class AnalisadorSintatico extends Analisador {
     private void analisaEndif() throws ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoFilaVazia {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
-        
+
         if (comandoPilha.equals("if")) {
             proxTermo = termosCodigo.retornaProxTermo();
             if (!proxTermo.equals("flag")) {
@@ -384,17 +385,17 @@ public class AnalisadorSintatico extends Analisador {
     //
     private void analisaWhile() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
         boolean analisouParam = false;
-        
+
         String expressaoCondicional = "";
         int contadorAnalisados = -1;
         String proxTermo = termosCodigo.retornaProxTermo();
-        char [] caracteresTermo;
+        char[] caracteresTermo;
         Pilha pilhaParenteses = new Pilha();
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("Não há nada depois do comando while");
         }
         int i;
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             analisouParam = true;
             // nao encontrou outro comando nem terminou os termos do codigo
             contadorAnalisados++;
@@ -404,7 +405,7 @@ public class AnalisadorSintatico extends Analisador {
                 if ((contadorAnalisados == 0) && (i == 0)) {
                     // primeiro termo depois do comando
                     // primeiro caractere do primeiro termo
-                    if  (c == '(') {
+                    if (c == '(') {
                         // ele deve ser parênteses
                         pilhaParenteses.empilha("(");
                     } else {
@@ -421,10 +422,10 @@ public class AnalisadorSintatico extends Analisador {
             expressaoCondicional += proxTermo;
             proxTermo = termosCodigo.retornaProxTermo();
         }
-        if (!pilhaParenteses.estaVazia()) {
+        if (!pilhaParenteses.pilhaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando while foram fechados");
         }
-        
+
         if (analisouParam) {
             filaExecucao.insereFila(expressaoCondicional);
             if (proxTermo.equals("do")) {
@@ -454,7 +455,7 @@ public class AnalisadorSintatico extends Analisador {
     private void analisaEndwhile() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
-        
+
         if (comandoPilha.equals("while")) {
             proxTermo = termosCodigo.retornaProxTermo();
             if (!proxTermo.equals("flag")) {
@@ -476,9 +477,9 @@ public class AnalisadorSintatico extends Analisador {
     //
     private void analisaFor() throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
         boolean analisouParam = false;
-        
+
         String expressaoAtribuicaoFor = "";
-        char [] caracteresExp;
+        char[] caracteresExp;
 
         String proxTermo = termosCodigo.retornaProxTermo();
 
@@ -488,7 +489,7 @@ public class AnalisadorSintatico extends Analisador {
             throw new ExcecaoErroSintatico("Não há nada depois do comando for");
         }
 
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             analisouParam = true;
             // nao encontrou outro comando nem terminou os termos do codigo
 
@@ -511,10 +512,10 @@ public class AnalisadorSintatico extends Analisador {
                     nomeVar = expressaoAtribuicaoFor.substring(0, cont);
                     posDoisPontos = cont;
                 }
-                if ((posDoisPontos != -1) && (cont == posDoisPontos+1)) {
+                if ((posDoisPontos != -1) && (cont == posDoisPontos + 1)) {
                     if (c == '=') {
                         atribuidor = ":=";
-                        valorVar = expressaoAtribuicaoFor.substring(cont+1, expressaoAtribuicaoFor.length());
+                        valorVar = expressaoAtribuicaoFor.substring(cont + 1, expressaoAtribuicaoFor.length());
                     } else {
                         throw new ExcecaoErroSintatico("Atribuição no comando for inválida: caractere antes do =");
                     }
@@ -522,18 +523,20 @@ public class AnalisadorSintatico extends Analisador {
                 cont++;
             }
         } else {
-            throw new ExcecaoErroSintatico ("Não há atribuição depois do for");
+            throw new ExcecaoErroSintatico("Não há atribuição depois do for");
         }
-        
-        if (posDoisPontos == -1)
+
+        if (posDoisPontos == -1) {
             throw new ExcecaoErroSintatico("Não há := na atribuição");
-        
-        for (char c : nomeVar.toCharArray()) {
-            if (!verificaSeAlfaMin(c) && !verificaSeDigito(c))
-                throw new ExcecaoErroSintatico("Atribuição no comando for inválida");
         }
-        
-        if (!pilhaParenteses.estaVazia()) {
+
+        for (char c : nomeVar.toCharArray()) {
+            if (!verificaSeAlfaMin(c) && !verificaSeDigito(c)) {
+                throw new ExcecaoErroSintatico("Atribuição no comando for inválida");
+            }
+        }
+
+        if (!pilhaParenteses.pilhaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando while foram fechados");
         }
 
@@ -555,7 +558,7 @@ public class AnalisadorSintatico extends Analisador {
         analisouParam = false;
         String expressao = "";
         proxTermo = termosCodigo.retornaProxTermo();
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             analisouParam = true;
             // nao encontrou outro comando nem terminou os termos do codigo
             expressao += proxTermo;
@@ -591,7 +594,7 @@ public class AnalisadorSintatico extends Analisador {
     private void analisaEndfor() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoErroSintatico {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
-        
+
         if (comandoPilha.equals("for")) {
             proxTermo = termosCodigo.retornaProxTermo();
             if (!proxTermo.equals("flag")) {
@@ -613,7 +616,7 @@ public class AnalisadorSintatico extends Analisador {
     //
     private void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico {
         String expressaoAtribuicaoFor = "";
-        char [] caracteresExp;
+        char[] caracteresExp;
 
         String proxTermo = termosCodigo.retornaProxTermo();
 
@@ -623,7 +626,7 @@ public class AnalisadorSintatico extends Analisador {
             throw new ExcecaoErroSintatico("Não há nada depois do comando de atribuição");
         }
 
-        while (!DicionarioComandos.verificaSeComando(proxTermo) && !proxTermo.equals("flag")) {
+        while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
             // nao encontrou outro comando nem terminou os termos do codigo
             expressaoAtribuicaoFor += proxTermo;
             proxTermo = termosCodigo.retornaProxTermo();
@@ -642,26 +645,26 @@ public class AnalisadorSintatico extends Analisador {
                 nomeVar = expressaoAtribuicaoFor.substring(0, cont);
                 posDoisPontos = cont;
             }
-            if ((posDoisPontos != -1) && (cont == posDoisPontos+1)) {
+            if ((posDoisPontos != -1) && (cont == posDoisPontos + 1)) {
                 if (c == '=') {
                     atribuidor = ":=";
-                    valorVar = expressaoAtribuicaoFor.substring(cont+1, expressaoAtribuicaoFor.length());
+                    valorVar = expressaoAtribuicaoFor.substring(cont + 1, expressaoAtribuicaoFor.length());
                 } else {
                     throw new ExcecaoErroSintatico("Atribuição inválida: caractere antes do =");
                 }
             }
             cont++;
         }
-        
+
 //        if (posDoisPontos == -1)
 //            throw new ExcecaoErroSintatico("Não há := na atribuição");
-        
         for (char c : nomeVar.toCharArray()) {
-            if (!verificaSeAlfaMin(c) && !verificaSeDigito(c))
+            if (!verificaSeAlfaMin(c) && !verificaSeDigito(c)) {
                 throw new ExcecaoErroSintatico("Atribuição inválida");
+            }
         }
-        
-        if (!pilhaParenteses.estaVazia()) {
+
+        if (!pilhaParenteses.pilhaVazia()) {
             throw new ExcecaoErroSintatico("Nem todos os parênteses no comando de atribuição foram fechados");
         }
 
@@ -678,14 +681,14 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  FIM MÉTODO DE ANALISE DO COMANDO DE ATRIBUIÇÃO
     //
-    
+
     //
     // INÍCIO MÉTODO DE ANÁLISE DO COMANDO DE ENCERRAMENTO DO PROGRAMA
     //
-    private void analisaEnd () throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
+    private void analisaEnd() throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
         if (temComandoBloco) {
-            if (!pilhaComandos.estaVazia()) {
-                throw new ExcecaoErroSintatico ("O end veio antes do esperado.");
+            if (!pilhaComandos.pilhaVazia()) {
+                throw new ExcecaoErroSintatico("O end veio antes do esperado.");
             }
         }
         filaExecucao.imprimeFila();
@@ -694,14 +697,14 @@ public class AnalisadorSintatico extends Analisador {
     // FIM MÉTODO DE ANÁLISE DO COMANDO DE ENCERRAMENTO DO PROGRAMA
     //
 
-
     //
     //  MÉTODOS DE VERIFICAÇÃO DO TIPO DO CARACTERE
     //
     private boolean verificaSeAlfaMin(char c) {
-        return (((int)c >= 97) && ((int)c <= 122));
+        return (((int) c >= 97) && ((int) c <= 122));
     }
-    private boolean verificaSeDigito (char c) {
-        return (((int)c >= 48) && ((int)c <= 57));
+
+    private boolean verificaSeDigito(char c) {
+        return (((int) c >= 48) && ((int) c <= 57));
     }
 }

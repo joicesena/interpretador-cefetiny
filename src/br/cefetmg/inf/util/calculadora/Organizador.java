@@ -1,5 +1,6 @@
 package br.cefetmg.inf.util.calculadora;
 
+import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
@@ -19,8 +20,8 @@ public final class Organizador {
         String concatenador = "";
         //
         do {
-            if (Constantes.INTEIROS.contains(expressao[i])) {
-                while (i < expressao.length && (Constantes.INTEIROS.contains(expressao[i])
+            if (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS)) {
+                while (i < expressao.length && (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS)
                         || expressao[i].equals("."))) {
                     if (expressao[i].equals(".")) {
                         contaPonto++;
@@ -33,23 +34,32 @@ public final class Organizador {
                     concatenador = "";
                     contaPonto = 0;
                 } else {
-                    throw new ExcecaoExpressaoInvalida("Expressão: Valor informado é inválido");
+                    throw new ExcecaoExpressaoInvalida("Expressão: Valor informado não é válido");
                 }
-            } else if (Constantes.ALFABETO.contains(expressao[i])) {
+            } else if (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.ALFABETO)) {
                 while (i < expressao.length
-                        && ((Constantes.ALFABETO.contains(expressao[i])) || (Constantes.INTEIROS.contains(expressao[i])))) {
+                        && ((Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.ALFABETO) 
+                             || (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS))))) {
                     concatenador += expressao[i];
                     i++;
                 }
                 pBase.empilha(concatenador);
                 concatenador = "";
-            } else if (Constantes.OP_RELACIONAIS.contains(expressao[i]) || Constantes.OP_BIN_ARITMETICOS.contains(expressao[i])) {
-                pBase.empilha(expressao[i]);
-                i++;
+            } else if (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.OP_RELACIONAIS) 
+                       || Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.OP_BIN_ARITMETICOS)) {
+                while (i < expressao.length
+                        && ((Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.OP_RELACIONAIS)
+                             || Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.OP_BIN_ARITMETICOS)))) {
+                    concatenador += expressao[i];
+                    i++;
+                }
+                pBase.empilha(concatenador);
+                concatenador = "";
             } else if (expressao[i].equals("\"")) {
                 if (expressao[expressao.length - 1].equals("\"")) {
                     while (i < expressao.length
-                            && ((Constantes.ALFABETO.contains(expressao[i])) || (Constantes.INTEIROS.contains(expressao[i])
+                            && ((Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.ALFABETO)) 
+                                || (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS)
                             || expressao[i].equals("\"")))) {
                         pBase.empilha(expressao[i]);
                         i++;
@@ -58,8 +68,10 @@ public final class Organizador {
             } else if (expressao[i].equals("(") || expressao[i].equals(")")) {
                 pBase.empilha(expressao[i]);
                 i++;
-            } else {
+            } else if (expressao[i].equals(" ")){
                 i++;
+            } else {
+                throw new ExcecaoExpressaoInvalida("Expressão: Caractere '" + expressao[i] + "' não está presente no alfabeto");
             }
         } while (i < expressao.length);
 

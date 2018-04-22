@@ -16,18 +16,18 @@ public class Pilha implements MetodosPilha {
     public Object desempilha() throws ExcecaoPilhaVazia {
         Object antigoTopo;
 
-        if (this.estaVazia() == false) {
+        if (this.pilhaVazia() == false) {
             antigoTopo = topo.getConteudo();
             topo = topo.getProximo();
 
             return antigoTopo;
         } else {
-            throw new ExcecaoPilhaVazia();
+            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia, não pode ser desempilhada");
         }
     }
 
     @Override
-    public boolean estaVazia() {
+    public boolean pilhaVazia() {
         return topo == null;
     }
 
@@ -49,14 +49,14 @@ public class Pilha implements MetodosPilha {
         Nodo percorre = topo;
         String saida = "";
         //
-        if (this.estaVazia() == false) {
+        if (this.pilhaVazia() == false) {
             while (percorre != null) {
                 saida += percorre.getConteudo();
                 percorre = percorre.getProximo();
             }
             System.out.println(saida);
         } else {
-            System.err.println("Impressão de conteúdo requisitada para pilha vazia");
+            System.out.println("*Pilha: Impressão de conteúdo requisitada para pilha vazia");
         }
 
     }
@@ -67,7 +67,7 @@ public class Pilha implements MetodosPilha {
         Object elementoSaida;
         int i = 0;
 
-        if (this.estaVazia() == false) {
+        if (this.pilhaVazia() == false) {
             while (i < vetorInvertido.length) {
                 elementoSaida = this.desempilha();
                 vetorInvertido[i] = elementoSaida;
@@ -79,7 +79,7 @@ public class Pilha implements MetodosPilha {
                 i++;
             }
         } else {
-            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia");
+            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia, não pode ser invertida");
         }
     }
 
@@ -97,12 +97,12 @@ public class Pilha implements MetodosPilha {
     }
 
     public void transfereConteudo(Pilha pAux) throws ExcecaoPilhaVazia {
-        if (!this.estaVazia()) {
+        if (!this.pilhaVazia()) {
             do {
                 pAux.empilha(this.desempilha());
-            } while (this.estaVazia() == false);
+            } while (this.pilhaVazia() == false);
         } else {
-            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia");
+            throw new ExcecaoPilhaVazia("Pilha: A pilha está vazia, não pode ter seu conteúdo transferido");
         }
     }
 }

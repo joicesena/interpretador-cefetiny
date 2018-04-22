@@ -1,5 +1,6 @@
 package br.cefetmg.inf.util.calculadora;
 
+import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
@@ -11,14 +12,14 @@ public final class ResolvedorAritmetico extends Resolvedor {
 
     private static EstruturaMemoria variaveis;
 
-    private static final Object[] operadores_arit1 = {"sqrt", "*", "+"};
-    private static final Object[] operadores_arit2 = {"sqrt", "/", "-"};
-    private static final Object[] operadores_arit3 = {"sqrt", "div", "+"};
-    private static final Object[] operadores_arit4 = {"sqrt", "mod", "+"};
+    private static final String[] OPS1 = {"sqrt", "*", "+"};
+    private static final String[] OPS2 = {"sqrt", "/", "-"};
+    private static final String[] OPS3 = {"sqrt", "div", "+"};
+    private static final String[] OPS4 = {"sqrt", "mod", "+"};
 
     public static Pilha resolveExpressaoAritmetica(Pilha pBase) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         boolean temOperadorLogico = false;
-        
+
         variaveis = EstruturaMemoria.getInstancia();
 
         int contaVars;
@@ -28,32 +29,32 @@ public final class ResolvedorAritmetico extends Resolvedor {
         if (possuiVariaveis(pBase, pAux)) {
             resolveVariaveis(pBase, pAux);
         }
-
+        
         for (int i = 0; i < 3; i++) {
             do {
                 elementoAtual = pBase.desempilha();
 
-                if (elementoAtual.equals(operadores_arit1[i])
-                        || elementoAtual.equals(operadores_arit2[i])
-                        || elementoAtual.equals(operadores_arit3[i])
-                        || elementoAtual.equals(operadores_arit4[i])) {
+                if (elementoAtual.equals(OPS1[i])
+                    || elementoAtual.equals(OPS2[i])
+                    || elementoAtual.equals(OPS3[i])
+                    || elementoAtual.equals(OPS4[i])) {
                     operador = (String) elementoAtual;
                     operando2 = pBase.desempilha();
                     if (i > 0) {
                         operando1 = pAux.desempilha();
                         pAux.empilha(resolveOperacaoBinaria(Conversor.converterObjectParaDouble(operando1),
-                                (String) operador,
-                                Conversor.converterObjectParaDouble(operando2)));
+                                                            (String) operador,
+                                                            Conversor.converterObjectParaDouble(operando2)));
                     } else {
                         pAux.empilha(resolveOperacaoUnaria(Conversor.converterObjectParaInt(operando2)));
                     }
-                } else if (Constantes.OP_LOGICOS.contains(elementoAtual)) {
+                } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_LOGICOS)) {
                     temOperadorLogico = true;
                     pAux.empilha(elementoAtual);
                 } else {
                     pAux.empilha(elementoAtual);
                 }
-            } while (pBase.estaVazia() == false);
+            } while (pBase.pilhaVazia() == false);
             pAux.transfereConteudo(pBase);
         }
         if (temOperadorLogico == true) {
@@ -72,7 +73,7 @@ public final class ResolvedorAritmetico extends Resolvedor {
                 resultado = true;
             }
             pAux.empilha(elementoAtual);
-        } while (pBase.estaVazia() == false);
+        } while (pBase.pilhaVazia() == false);
         pAux.transfereConteudo(pBase);
 
         return resultado;
@@ -91,7 +92,7 @@ public final class ResolvedorAritmetico extends Resolvedor {
                 }
             }
             pAux.empilha(elementoAtual);
-        } while (pBase.estaVazia() == false);
+        } while (pBase.pilhaVazia() == false);
         pAux.transfereConteudo(pBase);
     }
 
@@ -106,6 +107,7 @@ public final class ResolvedorAritmetico extends Resolvedor {
 
             case "div":
                 resultado = op1 / op2;
+                deveConverter = true;
                 break;
 
             case "mod":
@@ -133,8 +135,8 @@ public final class ResolvedorAritmetico extends Resolvedor {
         return resultado;
     }
 
-    public static int resolveOperacaoUnaria(int op) {
-        int resultado = 0;
+    public static double resolveOperacaoUnaria(int op) {
+        double resultado = 0;
 
         for (int i = 0; i < op; i++) {
             if (i * i == op) {
