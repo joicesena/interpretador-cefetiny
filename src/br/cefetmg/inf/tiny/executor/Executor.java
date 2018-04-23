@@ -40,8 +40,7 @@ public final class Executor {
                             comando = new ComandoReadInt((String)filaExecucao.removeFila());
                             break;
                         //"if",         3
-                        case 3:
-                            
+                        case 3:                            
                             Pilha pilhaIf = new Pilha();
                             pilhaIf.empilha(temp);
                             
@@ -81,7 +80,7 @@ public final class Executor {
                                 if (((String)elementoFilaExecucao).equals("endwhile")) {
                                     pilhaWhile.desempilha();
                                     if (pilhaWhile.pilhaVazia())
-                                        acabouIf = true;
+                                        acabouWhile = true;
                                 } else if (((String)elementoFilaExecucao).equals("while")) {
                                     pilhaWhile.empilha(elementoFilaExecucao);
                                 }
@@ -106,7 +105,7 @@ public final class Executor {
                                 if (((String)elementoFilaExecucao).equals("endfor")) {
                                     pilhaFor.desempilha();
                                     if (pilhaFor.pilhaVazia())
-                                        acabouIf = true;
+                                        acabouFor = true;
                                 } else if (((String)elementoFilaExecucao).equals("for")) {
                                     pilhaFor.empilha(elementoFilaExecucao);
                                 }
@@ -134,6 +133,8 @@ public final class Executor {
                     // valor da variável
                     temp = filaExecucao.removeFila();
                     filaComandoAtribuicao.insereFila(temp);
+                    
+                    Comando comando = new ComandoAtribuicao(filaComandoAtribuicao);
                 }
             }
         } catch (ExcecaoFilaVazia ex) {

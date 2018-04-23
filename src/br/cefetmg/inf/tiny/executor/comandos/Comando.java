@@ -1,19 +1,22 @@
 package br.cefetmg.inf.tiny.executor.comandos;
 
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
+import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
 
 public abstract class Comando {
-    private Fila filaComandoAtual;
-    
-    private final String parametro;
+    protected Fila filaComandoAtual;
+    protected static EstruturaMemoria variaveis;
+    protected final String parametro;
 
     public Comando(String parametro) {
         this.parametro = parametro;
+        variaveis = EstruturaMemoria.getInstancia();
     }
 
     public Comando(Fila filaComandoAtual) {
         this.filaComandoAtual = filaComandoAtual;
         parametro = null;
+        variaveis = EstruturaMemoria.getInstancia();
     }
     
     

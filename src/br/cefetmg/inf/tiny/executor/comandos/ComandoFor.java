@@ -11,8 +11,6 @@ public class ComandoFor extends Comando{
     public ComandoFor(Fila filaComandoAtual) {
         super(filaComandoAtual);
     }
-    
-    
 
     @Override
     public void executaComando() {
