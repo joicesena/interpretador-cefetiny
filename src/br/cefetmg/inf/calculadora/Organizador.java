@@ -4,6 +4,7 @@ import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
+import br.cefetmg.inf.util.Conversor;
 
 public final class Organizador {
 
@@ -13,7 +14,6 @@ public final class Organizador {
         expressao = expressaoCompleta.split("");
 
         int i = 0;
-        int contaPonto = 0;
 
         Pilha pBase = new Pilha();
 
@@ -23,19 +23,11 @@ public final class Organizador {
             if (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS)) {
                 while (i < expressao.length && (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS)
                         || expressao[i].equals("."))) {
-                    if (expressao[i].equals(".")) {
-                        contaPonto++;
-                    }
                     concatenador += expressao[i];
                     i++;
                 }
-                if (contaPonto == 1 || contaPonto == 0) {
-                    pBase.empilha(Double.parseDouble(concatenador));
-                    concatenador = "";
-                    contaPonto = 0;
-                } else {
-                    throw new ExcecaoExpressaoInvalida("Expressão: Valor informado não é válido");
-                }
+                pBase.empilha(Conversor.converteStringNumero(concatenador));
+                concatenador = "";
             } else if (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.ALFABETO)) {
                 while (i < expressao.length
                         && ((Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.ALFABETO) 

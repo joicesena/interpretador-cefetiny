@@ -22,7 +22,7 @@ public class Fila implements MetodosFila {
     @Override
     public Object removeFila() throws ExcecaoFilaVazia {
         Object antigoInicio;
-
+        
         if (this.filaVazia() == false) {
             antigoInicio = inicio.getConteudo();
             inicio = inicio.getProximo();

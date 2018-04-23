@@ -14,16 +14,16 @@ public final class Calculadora {
 
     private static Object resultadoExpressao;
 
-    static Object iniciaCalculadora(String expressaoBase) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
+    public static Object iniciaCalculadora(String expressaoBase) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         variaveis = EstruturaMemoria.getInstancia();
 
         Object resultadoFinal = null;
         //
         //try {
-            resultadoFinal = preparaPilha(expressaoBase);
+        resultadoFinal = preparaPilha(expressaoBase);
         //} catch (ExcecaoExpressaoInvalida | ExcecaoPilhaVazia e) {
-          //  System.err.println(e.getMessage());
-            //System.exit(0);
+        //  System.err.println(e.getMessage());
+        //System.exit(0);
         //}
         return resultadoFinal;
     }
@@ -60,12 +60,12 @@ public final class Calculadora {
 
             if (variavel.getTipo().equals("int") || variavel.getTipo().equals("double")
                 || variavel.getTipo().equals("expressao")) {
-                resultado = Resolvedor.resolveExpressaoCompleta(pUnitaria);
+                resultado = resolveExpressaoCompleta(pUnitaria);
             } else if (variavel.getTipo().equals("string")) {
                 resultado = variavel.getConteudo();
             }
         } else if (pUnitaria.getTopo().getConteudo() instanceof Integer || pUnitaria.getTopo().getConteudo() instanceof Double) {
-            resultado = Conversor.converterObjectParaInt(pUnitaria.getTopo().getConteudo());
+            resultado = Conversor.converteObjectInt(pUnitaria.getTopo().getConteudo());
         } else {
             resultado = pUnitaria.getTopo().getConteudo();
         }
@@ -128,8 +128,24 @@ public final class Calculadora {
 
     private static void encontraResultadoExpressao(Pilha pAux1) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         pAux1.invertePilha();
-        resultadoExpressao = Resolvedor.resolveExpressaoCompleta(pAux1);
+        resultadoExpressao = resolveExpressaoCompleta(pAux1);
         pAux1.esvaziaPilha();
         pAux1.empilha(resultadoExpressao);
+    }
+
+    private static Object resolveExpressaoCompleta(Pilha pBase) throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
+        String operadoresContidos = AnalisadorExpressao.temOperadores(pBase);
+        
+        Pilha pResolvida;
+        //
+        if (operadoresContidos.equals("") || operadoresContidos.equals("a")) {
+            pResolvida = ResolvedorAritmetico.resolveExpressaoAritmetica(pBase);
+        } else if (operadoresContidos.equals("l")) {
+            pResolvida = ResolvedorLogico.resolveExpressaoLogica(pBase);
+        } else {
+            pResolvida = ResolvedorAritmetico.resolveExpressaoAritmetica(pBase);
+            pResolvida = ResolvedorLogico.resolveExpressaoLogica(pResolvida);
+        }
+        return pResolvida.desempilha();
     }
 }

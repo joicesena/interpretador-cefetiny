@@ -18,8 +18,6 @@ public final class ResolvedorAritmetico extends Resolvedor {
     private static final String[] OPS4 = {"sqrt", "mod", "+"};
 
     public static Pilha resolveExpressaoAritmetica(Pilha pBase) throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
-        boolean temOperadorLogico = false;
-
         variaveis = EstruturaMemoria.getInstancia();
 
         int contaVars;
@@ -42,23 +40,19 @@ public final class ResolvedorAritmetico extends Resolvedor {
                     operando2 = pBase.desempilha();
                     if (i > 0) {
                         operando1 = pAux.desempilha();
-                        pAux.empilha(resolveOperacaoBinaria(Conversor.converterObjectParaDouble(operando1),
+                        pAux.empilha(resolveOperacaoBinaria(Conversor.converteObjectDouble(operando1),
                                                             (String) operador,
-                                                            Conversor.converterObjectParaDouble(operando2)));
+                                                            Conversor.converteObjectDouble(operando2)));
                     } else {
-                        pAux.empilha(resolveOperacaoUnaria(Conversor.converterObjectParaInt(operando2)));
+                        pAux.empilha(resolveOperacaoUnaria(Conversor.converteObjectInt(operando2)));
                     }
                 } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_LOGICOS)) {
-                    temOperadorLogico = true;
                     pAux.empilha(elementoAtual);
                 } else {
                     pAux.empilha(elementoAtual);
                 }
             } while (pBase.pilhaVazia() == false);
             pAux.transfereConteudo(pBase);
-        }
-        if (temOperadorLogico == true) {
-            pBase.empilha("&");
         }
 
         return pBase;

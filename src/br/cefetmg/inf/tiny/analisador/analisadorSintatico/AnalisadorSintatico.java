@@ -1,29 +1,50 @@
 package br.cefetmg.inf.tiny.analisador.analisadorSintatico;
 
+import br.cefetmg.inf.tiny.analisador.analisadorSemantico.AnalisadorSemantico;
 import br.cefetmg.inf.tiny.analisador.Analisador;
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.util.Dicionarios;
 
-public class AnalisadorSintatico extends Analisador {
+public final class AnalisadorSintatico extends Analisador {
+
+    private static AnalisadorSintatico instancia;
+    
+    private static AnalisadorSemantico analisadorSemantico;
+
+    private SeparadorSintatico termosCodigo;
 
     private String termo;
-    private SeparadorSintatico termosCodigo;
+
     private boolean temComandoBloco;
 
-    public AnalisadorSintatico(String codigo) {
-        termosCodigo = new SeparadorSintatico(codigo);
-        pilhaComandos = new Pilha();
-        filaExecucao = new Fila();
+    private AnalisadorSintatico(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         temComandoBloco = false;
-
-        analisa();
+        
+        filaExecucao = new Fila();
+        
+        pilhaComandos = new Pilha();
+        
+        termosCodigo = new SeparadorSintatico(codigo);
+        //
+        this.analisa();
+        
+        analisadorSemantico = AnalisadorSemantico.getInstancia();
     }
 
-    private void analisa() {
+    public static synchronized AnalisadorSintatico getInstancia(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
+        if (instancia == null) {
+            instancia = new AnalisadorSintatico(codigo);
+        }
+        return instancia;
+    }
+    
+    @Override
+    public void analisa() {
         try {
             termo = termosCodigo.retornaProxTermo();
             if (Dicionarios.procuraElementoNoDicionario(termo, Dicionarios.LISTA_COMANDOS)) {
@@ -110,7 +131,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DOS COMANDOS PRINT E PRINTLN
     //
-    private void analisaPrint() throws ExcecaoErroSintatico, ExcecaoPilhaVazia, ExcecaoFilaVazia {
+    @Override
+    protected void analisaPrint() throws ExcecaoErroSintatico, ExcecaoPilhaVazia, ExcecaoFilaVazia {
         boolean analisouParam = false;
         String expressaoImprimir = "";
         int contadorAnalisados = -1;
@@ -177,7 +199,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO READINT
     //
-    private void analisaReadInt() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
+    @Override
+    protected void analisaReadInt() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
         // expressão que conterá os parênteses e o nome da variável
         boolean analisouParam = false;
         String expressao = "";
@@ -268,7 +291,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO IF
     //
-    private void analisaIf() throws ExcecaoErroSintatico, ExcecaoPilhaVazia, ExcecaoFilaVazia {
+    @Override
+    protected void analisaIf() throws ExcecaoErroSintatico, ExcecaoPilhaVazia, ExcecaoFilaVazia {
         boolean analisouParam = false;
 
         String expressaoCondicional = "";
@@ -335,7 +359,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO ELSE
     //
-    private void analisaElse() throws ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoFilaVazia {
+    @Override
+    protected void analisaElse() throws ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoFilaVazia {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
 
@@ -359,7 +384,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO ENDIF
     //
-    private void analisaEndif() throws ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoFilaVazia {
+    @Override
+    protected void analisaEndif() throws ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoFilaVazia {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
 
@@ -382,7 +408,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO WHILE
     //
-    private void analisaWhile() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
+    @Override
+    protected void analisaWhile() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
         boolean analisouParam = false;
 
         String expressaoCondicional = "";
@@ -451,7 +478,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO ENDWHILE
     //
-    private void analisaEndwhile() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
+    @Override
+    protected void analisaEndwhile() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
 
@@ -474,7 +502,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO FOR
     //
-    private void analisaFor() throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
+    @Override
+    protected void analisaFor() throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
         boolean analisouParam = false;
 
         String expressaoAtribuicaoFor = "";
@@ -590,7 +619,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO ENDFOR
     //
-    private void analisaEndfor() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoErroSintatico {
+    @Override
+    protected void analisaEndfor() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoErroSintatico {
         String comandoPilha = (String) pilhaComandos.desempilha();
         String proxTermo;
 
@@ -613,7 +643,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO DE ATRIBUIÇÃO
     //
-    private void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico {
+    @Override
+    protected void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico {
         String expressaoAtribuicaoFor = "";
         char[] caracteresExp;
 
@@ -684,7 +715,8 @@ public class AnalisadorSintatico extends Analisador {
     //
     // INÍCIO MÉTODO DE ANÁLISE DO COMANDO DE ENCERRAMENTO DO PROGRAMA
     //
-    private void analisaEnd() throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
+    @Override
+    protected void analisaEnd() throws ExcecaoErroSintatico, ExcecaoFilaVazia, ExcecaoPilhaVazia {
         if (temComandoBloco) {
             if (!pilhaComandos.pilhaVazia()) {
                 throw new ExcecaoErroSintatico("O end veio antes do esperado.");

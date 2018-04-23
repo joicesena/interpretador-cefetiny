@@ -4,10 +4,13 @@ import java.util.Scanner;
 import br.cefetmg.inf.tiny.entradaCodigo.*;
 import java.io.FileNotFoundException;
 import br.cefetmg.inf.tiny.analisador.analisadorSintatico.AnalisadorSintatico;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 
 public class InterfaceConsole {
     
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         Scanner entrada = new Scanner(System.in);
         String caminhoArquivoTexto;
         
@@ -35,7 +38,7 @@ public class InterfaceConsole {
         }
         
         LeitorDeArquivo.imprimeCodigo();        
-        AnalisadorSintatico analisador = new AnalisadorSintatico(LeitorDeArquivo.getCodigo());
+        AnalisadorSintatico analisador = AnalisadorSintatico.getInstancia(LeitorDeArquivo.getCodigo());
     }
     
 }

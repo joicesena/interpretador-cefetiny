@@ -30,9 +30,9 @@ public final class ResolvedorLogico extends Resolvedor {
                     switch (i) {
                         case 0:
                             operando1 = pAux.desempilha();
-                            pAux.empilha(resolveOperacaoRelacional(Conversor.converterObjectParaDouble(operando1),
+                            pAux.empilha(resolveOperacaoRelacional(Conversor.converteObjectDouble(operando1),
                                     (String) operador,
-                                    Conversor.converterObjectParaDouble(operando2)));
+                                    Conversor.converteObjectDouble(operando2)));
                             break;
                         case 1:
                             pAux.empilha(resolveOperacaoUnaria((String) operando2));

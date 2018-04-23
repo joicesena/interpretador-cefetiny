@@ -1,5 +1,6 @@
 package br.cefetmg.inf.calculadora;
 
+import static br.cefetmg.inf.calculadora.Resolvedor.elementoAtual;
 import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
@@ -51,7 +52,7 @@ public final class AnalisadorExpressao {
             if (contaAbreParenteses == contaFechaParenteses
                 && (elementoAtual instanceof Double || elementoAtual instanceof Integer
                     || elementoAtual.equals("true") || elementoAtual.equals("false")
-                    || elementoAtual.equals(")") || variaveis.procuraVariavel((String) elementoAtual) != null)
+                    || elementoAtual.equals(")") || variaveis.procuraVariavel(elementoAtual.toString()) != null)
                 || (elementoAtual.equals("\"") && contaAspas == 2)) {
                 estadoFinal();
                 return;
@@ -79,7 +80,7 @@ public final class AnalisadorExpressao {
             estado5();
         } else if (elementoAtual.equals("\"")) {
             estado10();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -119,7 +120,7 @@ public final class AnalisadorExpressao {
             estado4();
         } else if (elementoAtual.equals("not")) {
             estado5();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -149,7 +150,7 @@ public final class AnalisadorExpressao {
             estado1();
         } else if (elementoAtual.equals("(")) {
             estado2();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -164,7 +165,7 @@ public final class AnalisadorExpressao {
             estado3();
         } else if (elementoAtual.equals("(")) {
             estado2();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -179,7 +180,7 @@ public final class AnalisadorExpressao {
             estado1();
         } else if (elementoAtual.equals("(")) {
             estado2();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -194,7 +195,7 @@ public final class AnalisadorExpressao {
             estado1();
         } else if (elementoAtual.equals("(")) {
             estado2();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -230,7 +231,7 @@ public final class AnalisadorExpressao {
             estado2();
         } else if (elementoAtual.equals("true") || elementoAtual.equals("false")) {
             estado3();
-        } else if (variaveis.procuraVariavel((String) elementoAtual) != null) {
+        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
             estadoErro();
@@ -257,5 +258,45 @@ public final class AnalisadorExpressao {
 
     private static void estadoErro() throws ExcecaoExpressaoInvalida {
         throw new ExcecaoExpressaoInvalida("Expressão: Semântica ou sintaxe falha");
+    }
+
+    public static String temOperadores(Pilha pBase) throws ExcecaoPilhaVazia {
+        Pilha pAux = new Pilha();
+        String operadoresContidos = "";
+        //
+        do {
+            elementoAtual = pBase.desempilha();
+            //
+            if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_ARITMETICOS)
+                && (operadoresContidos.equals("") || operadoresContidos.equals("l"))) {
+                operadoresContidos += "a";
+            } else if (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.OP_LOGICOS)
+                       && (operadoresContidos.equals("") || operadoresContidos.equals("a"))) {
+                operadoresContidos += "l";
+            }
+
+            pAux.empilha(elementoAtual);
+        } while (!pBase.pilhaVazia());
+        pAux.transfereConteudo(pBase);
+
+        return operadoresContidos;
+    }
+
+    public static boolean nomeVariavelProcede(String nomeVar) {
+        boolean nomeProcede = true;
+
+        String[] caracteresNome = nomeVar.split("");
+        //
+        if (!Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.ALFABETO)) {
+            nomeProcede = false;
+        } else {
+            for (int i = 1; i < caracteresNome.length; i++) {
+                if (!(Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.INTEIROS) 
+                        || Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.ALFABETO))) {
+                    nomeProcede = false;
+                }
+            }
+        }
+        return nomeProcede;
     }
 }

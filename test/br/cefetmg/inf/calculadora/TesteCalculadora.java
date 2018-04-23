@@ -1,6 +1,5 @@
 package br.cefetmg.inf.calculadora;
 
-import br.cefetmg.inf.calculadora.Calculadora;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
@@ -92,7 +91,7 @@ public class TesteCalculadora {
     }
 
     @Test
-    public void testIniciaCalculadora() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
+    public void testeIniciaCalculadora() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
         int j = 1;
         //
         System.out.println("#####TESTE INICIA CALCULADORA");
@@ -130,7 +129,7 @@ public class TesteCalculadora {
     }
 
     @Ignore
-    public void testFormataAnalisaExpressao() throws Exception {
+    public void testeFormataAnalisaExpressao() throws Exception {
         System.out.println("##Formata e Analisa Expressão##\n");
         String expressaoBase = "";
         Pilha expResult = null;
