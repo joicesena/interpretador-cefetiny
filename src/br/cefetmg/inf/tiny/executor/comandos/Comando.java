@@ -22,7 +22,7 @@ public abstract class Comando {
         variaveis = EstruturaMemoria.getInstancia();
     }
     
-    public abstract void executaComando() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida;
+    public abstract void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida;
     
-    public abstract void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida;
+    public abstract void analisa() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida;
 }

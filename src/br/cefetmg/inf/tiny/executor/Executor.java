@@ -79,12 +79,16 @@ public final class Executor {
                                 filaComandoWhile.insereFila(elementoFilaExecucao);
                                 if (((String)elementoFilaExecucao).equals("endwhile")) {
                                     pilhaWhile.desempilha();
-                                    if (pilhaWhile.pilhaVazia())
+                                    if (pilhaWhile.pilhaVazia()) {
                                         acabouWhile = true;
+                                    }
                                 } else if (((String)elementoFilaExecucao).equals("while")) {
                                     pilhaWhile.empilha(elementoFilaExecucao);
                                 }
                             }
+                            
+                            System.out.println("comando while:");
+                            filaComandoWhile.imprimeFila();
                             
                             comando = new ComandoWhile(filaComandoWhile);
                             

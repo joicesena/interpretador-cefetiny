@@ -11,12 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/calculadora/Calculadora.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/calculadora/Organizador.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/calculadora/AnalisadorExpressao.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/entradaCodigo/LeitorDeArquivo.java</file>
-            <file>file:/F:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/comandos/ComandoPrintln.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
