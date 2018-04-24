@@ -57,7 +57,7 @@ public final class AnalisadorExpressao {
                 estadoFinal();
                 return;
             } else {
-                estadoErro();
+                estadoErro("Expressão:\n\ttérmino inesperado");
             }
         }
 
@@ -83,7 +83,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expresão:\n\tcomeça de forma inapropriada");
         }
     }
 
@@ -100,7 +100,7 @@ public final class AnalisadorExpressao {
         } else if (elementoAtual.equals(")")) {
             estado8();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após um número");
         }
     }
 
@@ -123,7 +123,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após um '('");
         }
     }
 
@@ -138,7 +138,7 @@ public final class AnalisadorExpressao {
         } else if (elementoAtual.equals(")")) {
             estado8();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após booleano");
         }
     }
 
@@ -153,7 +153,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após 'sqrt'");
         }
     }
 
@@ -168,7 +168,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após 'not'");
         }
     }
 
@@ -183,7 +183,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após operador aritmético binário");
         }
     }
 
@@ -198,7 +198,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após operador relacional");
         }
     }
 
@@ -219,7 +219,7 @@ public final class AnalisadorExpressao {
         } else if (elementoAtual.equals("and") || elementoAtual.equals("or")) {
             estado9();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após ')'");
         }
     }
 
@@ -234,7 +234,7 @@ public final class AnalisadorExpressao {
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
         } else {
-            estadoErro();
+            estadoErro("Expressão:\n\telemento inválido após operador lógico");
         }
     }
 
@@ -256,11 +256,11 @@ public final class AnalisadorExpressao {
         terminaAutomato = true;
     }
 
-    private static void estadoErro() throws ExcecaoExpressaoInvalida {
-        throw new ExcecaoExpressaoInvalida("Expressão: Semântica ou sintaxe falha");
+    private static void estadoErro(String mensagem) throws ExcecaoExpressaoInvalida {
+        throw new ExcecaoExpressaoInvalida(mensagem);
     }
 
-    public static String temOperadores(Pilha pBase) throws ExcecaoPilhaVazia {
+    public static String tipoExpressao(Pilha pBase) throws ExcecaoPilhaVazia {
         Pilha pAux = new Pilha();
         String operadoresContidos = "";
         //

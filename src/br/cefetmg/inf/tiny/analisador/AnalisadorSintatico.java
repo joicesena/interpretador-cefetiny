@@ -1,4 +1,4 @@
-package br.cefetmg.inf.tiny.analisador.analisadorSintatico;
+package br.cefetmg.inf.tiny.analisador;
 
 import br.cefetmg.inf.tiny.analisador.analisadorSemantico.AnalisadorSemantico;
 import br.cefetmg.inf.tiny.analisador.Analisador;
@@ -8,6 +8,7 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
+import br.cefetmg.inf.tiny.executor.Executor;
 import br.cefetmg.inf.util.Dicionarios;
 
 public final class AnalisadorSintatico extends Analisador {
@@ -33,7 +34,7 @@ public final class AnalisadorSintatico extends Analisador {
         //
         this.analisa();
         
-        analisadorSemantico = AnalisadorSemantico.getInstancia();
+        Executor.executaPrograma(filaExecucao);
     }
 
     public static synchronized AnalisadorSintatico getInstancia(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
@@ -722,7 +723,7 @@ public final class AnalisadorSintatico extends Analisador {
                 throw new ExcecaoErroSintatico("O end veio antes do esperado.");
             }
         }
-        filaExecucao.imprimeFila();
+        //filaExecucao.imprimeFila();
     }
     //
     // FIM MÉTODO DE ANÁLISE DO COMANDO DE ENCERRAMENTO DO PROGRAMA

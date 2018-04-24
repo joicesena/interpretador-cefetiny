@@ -7,10 +7,8 @@ import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
-import br.cefetmg.inf.tiny.executor.Executor;
-import br.cefetmg.inf.util.Dicionarios;
 
-public class ComandoWhile extends Comando{
+public final class ComandoWhile extends Comando{
     
     Fila filaComandosWhile;
     String expressaoWhile;
@@ -19,28 +17,23 @@ public class ComandoWhile extends Comando{
         super(parametro);
     }
 
-    public ComandoWhile(Fila filaComandoAtual) {
+    public ComandoWhile(Fila filaComandoAtual) throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoPilhaVazia {
         super(filaComandoAtual);
         
         filaComandosWhile = new Fila();
         expressaoWhile = "";
         
         try {
-            analisaWhile();
-        } catch (ExcecaoFilaVazia ex) {
-            System.err.println(ex.getMessage());
-        } catch (ExcecaoExpressaoInvalida ex) {
-            System.err.println(ex.getMessage());
-        } catch (ExcecaoPilhaVazia ex) {
+            analisa();
+        } catch (ExcecaoFilaVazia | ExcecaoExpressaoInvalida | ExcecaoPilhaVazia ex) {
             System.err.println(ex.getMessage());
         }
 
         executaComando();
-
     }
 
     @Override
-    public void executaComando() {
+    public void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia{
         Pilha pilhaWhile = new Pilha();
         Pilha pBase;
         pilhaWhile.empilha("while");
@@ -206,7 +199,8 @@ public class ComandoWhile extends Comando{
 //
 //
 //
-    private void analisaWhile() throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
+    @Override
+    public void analisa() throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
         // recebeu uma fila
         Object temp;
         String parametro;
@@ -225,7 +219,7 @@ public class ComandoWhile extends Comando{
         
         pBase = Calculadora.formataAnalisaExpressao(expressaoWhile);
 
-        if ( !AnalisadorExpressao.temOperadores(pBase).equals("l") 
+        if ( !AnalisadorExpressao.tipoExpressao(pBase).equals("l") 
              || !parametro.equals("true") || !parametro.equals("false")) {
             throw new ExcecaoExpressaoInvalida("Comando 'while': possui resultado não booleano");
         }

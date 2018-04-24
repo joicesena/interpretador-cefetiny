@@ -6,7 +6,6 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
 import br.cefetmg.inf.tiny.memoria.Variavel;
 import br.cefetmg.inf.util.Conversor;
-import java.util.Scanner;
 
 public final class Calculadora {
 
@@ -18,13 +17,9 @@ public final class Calculadora {
         variaveis = EstruturaMemoria.getInstancia();
 
         Object resultadoFinal = null;
-        //
-        //try {
+        
         resultadoFinal = preparaPilha(expressaoBase);
-        //} catch (ExcecaoExpressaoInvalida | ExcecaoPilhaVazia e) {
-        //  System.err.println(e.getMessage());
-        //System.exit(0);
-        //}
+        
         return resultadoFinal;
     }
 
@@ -134,7 +129,7 @@ public final class Calculadora {
     }
 
     private static Object resolveExpressaoCompleta(Pilha pBase) throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
-        String operadoresContidos = AnalisadorExpressao.temOperadores(pBase);
+        String operadoresContidos = AnalisadorExpressao.tipoExpressao(pBase);
         
         Pilha pResolvida;
         //

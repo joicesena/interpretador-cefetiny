@@ -2,6 +2,7 @@ package br.cefetmg.inf.tiny.executor;
 
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.comandos.*;
@@ -15,9 +16,8 @@ import br.cefetmg.inf.util.Dicionarios;
 public final class Executor {
     private static Fila filaExecucao;
     
-    public static void executaPrograma(Fila filaAnalisada) {
+    public static void executaPrograma(Fila filaAnalisada) throws ExcecaoExpressaoInvalida {
         filaExecucao = filaAnalisada;
-        
         try {
             Object temp = null;        
             while (!filaExecucao.filaVazia()) {
@@ -29,15 +29,15 @@ public final class Executor {
                     switch (Dicionarios.qualComando((String)temp)) {
                         // print
                         case 0:
-                            comando = new ComandoPrint((String)filaExecucao.removeFila());
+                            comando = new ComandoPrint(filaExecucao.removeFila().toString());
                             break;
                         // println
                         case 1:
-                            comando = new ComandoPrintln((String)filaExecucao.removeFila());
+                            comando = new ComandoPrintln(filaExecucao.removeFila().toString());
                             break;
                         //"readInt",    2
                         case 2:
-                            comando = new ComandoReadInt((String)filaExecucao.removeFila());
+                            comando = new ComandoReadInt((String)filaExecucao.removeFila().toString());
                             break;
                         //"if",         3
                         case 3:                            
@@ -128,7 +128,6 @@ public final class Executor {
 
                     // atribuidor
                     temp = filaExecucao.removeFila();
-                    filaComandoAtribuicao.insereFila(temp);
 
                     // valor da variável
                     temp = filaExecucao.removeFila();

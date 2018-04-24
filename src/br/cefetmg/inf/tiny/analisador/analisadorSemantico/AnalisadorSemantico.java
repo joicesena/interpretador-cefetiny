@@ -106,7 +106,7 @@ public final class AnalisadorSemantico extends Analisador {
         parametro = parametro.substring(1, (parametro.length() - 1));
         pBase = Calculadora.formataAnalisaExpressao(parametro);
 
-        if (!AnalisadorExpressao.temOperadores(pBase).equals("l") || parametro.equals("true")
+        if (!AnalisadorExpressao.tipoExpressao(pBase).equals("l") || parametro.equals("true")
             || parametro.equals("false")) {
             throw new ExcecaoExpressaoInvalida("Comando 'if': possui resultado não booleano");
         }
@@ -131,7 +131,7 @@ public final class AnalisadorSemantico extends Analisador {
         parametro = parametro.substring(1, (parametro.length() - 1));
         pBase = Calculadora.formataAnalisaExpressao(parametro);
 
-        if (!AnalisadorExpressao.temOperadores(pBase).equals("l") || parametro.equals("true")
+        if (!AnalisadorExpressao.tipoExpressao(pBase).equals("l") || parametro.equals("true")
             || parametro.equals("false")) {
             throw new ExcecaoExpressaoInvalida("Comando 'while': possui resultado não booleano");
         }

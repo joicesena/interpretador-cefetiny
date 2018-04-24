@@ -1,4 +1,4 @@
-package br.cefetmg.inf.tiny.analisador.analisadorSintatico;
+package br.cefetmg.inf.tiny.analisador;
 
 public class SeparadorSintatico {
 
