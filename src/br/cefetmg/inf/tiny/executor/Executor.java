@@ -87,9 +87,6 @@ public final class Executor {
                                 }
                             }
                             
-                            System.out.println("comando while:");
-                            filaComandoWhile.imprimeFila();
-                            
                             comando = new ComandoWhile(filaComandoWhile);
                             
                             break;

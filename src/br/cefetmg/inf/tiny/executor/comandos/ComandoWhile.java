@@ -60,14 +60,12 @@ public final class ComandoWhile extends Comando{
                 }
             }
             
-            filaComandosWhile.imprimeFila();
             Fila filaExecucao = new Fila();
                         
             // executa o while
             boolean continuaWhile = true;
             while (continuaWhile) {
                 copiaFila(filaComandosWhile, filaExecucao);
-                System.out.println("filaExecucao");
                 // analisa expressão
                 // se retornar true, continua rodando o while
                 if ( (((Calculadora.iniciaCalculadora(expressaoWhile))).toString()).equals("true")) {
