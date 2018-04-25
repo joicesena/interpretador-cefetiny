@@ -31,6 +31,7 @@ public class ComandoFor extends Comando{
         try {
             analisa();
             executaComando();
+            variaveis.removeVariavel(nomeVar);
         } catch (ExcecaoFilaVazia | ExcecaoExpressaoInvalida | ExcecaoPilhaVazia ex) {
             System.err.println(ex.getMessage());
         }
