@@ -30,8 +30,8 @@ public final class LeitorDeArquivo {
     }
 
     public static void imprimeCodigo() {
-        System.out.println("\nO arquivo " + caminhoArquivo + " foi encontrado com sucesso!\n"
-                           + "Código do programa:\n\n"
+        System.out.println("O arquivo " + caminhoArquivo + " foi encontrado com sucesso!\n\n"
+                           + "                         Código do programa                           \n"
                            + "----------------------------------------------------------------------\n"
                            + codigo
                            + "\n----------------------------------------------------------------------\n");

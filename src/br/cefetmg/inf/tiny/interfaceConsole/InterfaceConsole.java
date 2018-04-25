@@ -15,7 +15,7 @@ public class InterfaceConsole {
         String caminhoArquivoTexto;
         
         
-        System.out.println(
+        System.out.print(
             "                _____      __     _   _                  \n" +
             "               / ____|    / _|   | | (_)                 \n" +
             "              | |     ___| |_ ___| |_ _ _ __  _   _      \n" +
@@ -24,7 +24,7 @@ public class InterfaceConsole {
             "INTERPRETADOR  \\_____\\___|_| \\___|\\__|_|_| |_|\\__, |\n" +
             "                                               __/ |     \n" +
             "                                              |___/    \n\n" +
-            "Digite o caminho do arquivo texto que contém seu código:   "        
+            "Digite o caminho do arquivo texto que contém seu código: "        
         );
         
 
