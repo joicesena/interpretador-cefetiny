@@ -646,40 +646,70 @@ public final class AnalisadorSintatico extends Analisador {
     //
     @Override
     protected void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico {
-        String expressaoAtribuicaoFor = "";
+        
+        String expressaoAtribuicao = "";
         char[] caracteresExp;
-
-        String proxTermo = termosCodigo.retornaProxTermo();
-
-        Pilha pilhaParenteses = new Pilha();
-
-        if (proxTermo.equals("flag")) {
-            throw new ExcecaoErroSintatico("Não há nada depois do comando de atribuição");
-        }
+        
+        Fila filaAnalise = new Fila();
+        
+        String proxTermo;
+        proxTermo = termosCodigo.retornaProxTermo();
+        
+        boolean achouAtribuidor = false;
+        boolean temMaisAtribuicao = false;
 
         while (!Dicionarios.procuraElementoNoDicionario(proxTermo, Dicionarios.LISTA_COMANDOS) && !proxTermo.equals("flag")) {
-            // nao encontrou outro comando nem terminou os termos do codigo
-            expressaoAtribuicaoFor += proxTermo;
-            proxTermo = termosCodigo.retornaProxTermo();
+            // enquanto não achar comando ou nao tiver acabado os termos do código
+            if (!achouAtribuidor) {
+                // se não achou atribuidor, faz parte da expressaoAtribuicao
+                expressaoAtribuicao += proxTermo;
+                if (proxTermo.contains(":")) {
+                    if ((proxTermo.charAt((proxTermo.indexOf(":"))+1)) == '=') {
+                        achouAtribuidor = true;
+                    }
+                }
+                proxTermo = termosCodigo.retornaProxTermo();
+            } else {
+                // já achou atribuidor
+                if (proxTermo.contains(":")) {
+                    temMaisAtribuicao = true;
+                    // se o termo tiver :
+                    if (proxTermo.startsWith(":")) {
+                        // se for a primeira coisa do termo, vai ficar como [var] [:=] [exp]
+                        // volta para [var]
+                        termosCodigo.voltaUmTermo();
+                        //volta para antes de [var]
+                        termosCodigo.voltaUmTermo();
+                        break;
+                    } else {
+                        // não é o primeiro caractere do termo
+                        // seria algo como [var[:=]]
+                        // volta para o termo anterior
+                        termosCodigo.voltaUmTermo();
+                        break;
+                    }
+                }
+            }
         }
 
+        Pilha pilhaParenteses = new Pilha();
         int cont = 0;
         int posDoisPontos = -1;
         String nomeVar = "", atribuidor = "", valorVar = "";
-        caracteresExp = expressaoAtribuicaoFor.toCharArray();
+        caracteresExp = expressaoAtribuicao.toCharArray();
 
         for (char c : caracteresExp) {
             if ((cont == 0) && (!verificaSeAlfaMin(c))) {
                 throw new ExcecaoErroSintatico("Atribuição inválida");
             }
             if ((c == ':') && (nomeVar.equals(""))) {
-                nomeVar = expressaoAtribuicaoFor.substring(0, cont);
+                nomeVar = expressaoAtribuicao.substring(0, cont);
                 posDoisPontos = cont;
             }
             if ((posDoisPontos != -1) && (cont == posDoisPontos + 1)) {
                 if (c == '=') {
                     atribuidor = ":=";
-                    valorVar = expressaoAtribuicaoFor.substring(cont + 1, expressaoAtribuicaoFor.length());
+                    valorVar = expressaoAtribuicao.substring(cont + 1, expressaoAtribuicao.length());
                 } else {
                     throw new ExcecaoErroSintatico("Atribuição inválida: caractere antes do =");
                 }
@@ -687,8 +717,6 @@ public final class AnalisadorSintatico extends Analisador {
             cont++;
         }
 
-//        if (posDoisPontos == -1)
-//            throw new ExcecaoErroSintatico("Não há := na atribuição");
         for (char c : nomeVar.toCharArray()) {
             if (!verificaSeAlfaMin(c) && !verificaSeDigito(c)) {
                 throw new ExcecaoErroSintatico("Atribuição inválida");
@@ -705,9 +733,14 @@ public final class AnalisadorSintatico extends Analisador {
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("O programa não termina como o esperado");
         } else {
-            termosCodigo.voltaUmTermo();
-            analisa();
+            if (!temMaisAtribuicao) {
+                termosCodigo.voltaUmTermo();
+                analisa();
+            } else {
+                analisaAtribuicao();
+            }
         }
+        
     }
     //
     //  FIM MÉTODO DE ANALISE DO COMANDO DE ATRIBUIÇÃO
