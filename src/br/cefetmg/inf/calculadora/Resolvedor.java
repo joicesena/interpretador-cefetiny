@@ -5,9 +5,10 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
 import br.cefetmg.inf.tiny.memoria.Variavel;
-import br.cefetmg.inf.util.Dicionarios;
 
 public class Resolvedor {
+
+    protected static boolean varConteudoVariavel;
 
     protected static EstruturaMemoria variaveis = EstruturaMemoria.getInstancia();
 
@@ -55,8 +56,10 @@ public class Resolvedor {
         do {
             elementoAtual = pBase.desempilha();
             //
-            if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
+            if (variaveis.procuraVariavel(elementoAtual.toString()) != null && !varConteudoVariavel) {
                 resultado = true;
+            } else {
+                throw new ExcecaoExpressaoInvalida("Expressão:\n\ta variável posssui ela mesma em seu conteúdo");
             }
             pAux.empilha(elementoAtual);
         } while (pBase.pilhaVazia() == false);
@@ -69,21 +72,19 @@ public class Resolvedor {
         do {
             elementoAtual = pBase.desempilha();
             if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
-                if (elementoAtual.equals(variavelAnterior)) {
-                    throw new ExcecaoExpressaoInvalida("Expressão:\n\tnão é válido incluir uma variável no seu próprio conteúdo");
-                } else {
-                    variavelAnterior = elementoAtual.toString();
-                    Variavel varEncontrada = variaveis.procuraVariavel(elementoAtual.toString());
+                Variavel varEncontrada = variaveis.procuraVariavel(elementoAtual.toString());
 
-                    if (varEncontrada.getTipo().equals("expressao")) {
-                        elementoAtual = Calculadora.iniciaCalculadora((String) varEncontrada.getConteudo());
-                    } else if (varEncontrada.getTipo().equals("int") || varEncontrada.getTipo().equals("double")) {
-                        elementoAtual = varEncontrada.getConteudo();
-                    }
+                if (varEncontrada.getTipo().equals("expressao")) {
+                    varConteudoVariavel = true;
+                    elementoAtual = Calculadora.iniciaCalculadora((String) varEncontrada.getConteudo());
+                    varConteudoVariavel = false;
+                } else if (varEncontrada.getTipo().equals("int") || varEncontrada.getTipo().equals("double")) {
+                    elementoAtual = varEncontrada.getConteudo();
                 }
             }
             pAux.empilha(elementoAtual);
         } while (pBase.pilhaVazia() == false);
         pAux.transfereConteudo(pBase);
     }
+
 }

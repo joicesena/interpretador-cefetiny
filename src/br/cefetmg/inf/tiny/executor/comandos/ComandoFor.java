@@ -67,11 +67,14 @@ public final class ComandoFor extends Comando {
             Executor.executaPrograma(filaExecucao);
             if (tipoOperacao.equals("to")) {
                 atribuicaoFor++;
+                if (atribuicaoFor > valorComparacao) {
+                    continuaFor = false;
+                }
             } else {
                 atribuicaoFor--;
-            }
-            if (atribuicaoFor == valorComparacao) {
-                continuaFor = false;
+                if (atribuicaoFor < valorComparacao) {
+                    continuaFor = false;
+                }
             }
             variaveis.alteraValorVariavel(nomeVar, atribuicaoFor);
         }
@@ -96,7 +99,7 @@ public final class ComandoFor extends Comando {
         temp = filaComandoAtual.removeFila();
 
         Object resultadoExpressao = ((Calculadora.iniciaCalculadora(temp.toString())));
-
+        
         if (!(resultadoExpressao instanceof Integer)) {
             throw new ExcecaoExpressaoInvalida("Comando 'for': valor atribuído à variável não é inteiro");
         }

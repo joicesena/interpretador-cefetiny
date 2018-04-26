@@ -18,12 +18,19 @@ public class InterfaceConsole {
         Scanner entrada = new Scanner(System.in);
         String caminhoArquivoTexto = null;
         
-        
-        
-        
+        System.out.print(	
+            "                _____      __     _   _                  \n" +	
+            "               / ____|    / _|   | | (_)                 \n" +	
+            "              | |     ___| |_ ___| |_ _ _ __  _   _      \n" +	
+            "              | |    / _ \\  _/ _ \\ __| | '_ \\| | | |  \n" +	
+            "              | |___|  __/ ||  __/ |_| | | | | |_| |     \n" +	
+            "INTERPRETADOR  \\_____\\___|_| \\___|\\__|_|_| |_|\\__, |\n" +	
+            "                                               __/ |     \n" +	
+            "                                              |___/    \n\n" +	
+            "Digite o caminho do arquivo texto que contém seu código: "        	
+        );
 
-        //caminhoArquivoTexto = entrada.nextLine();
-        
+        caminhoArquivoTexto = entrada.nextLine();
         
         try {
             LeitorArquivo.leArquivo(caminhoArquivoTexto); 

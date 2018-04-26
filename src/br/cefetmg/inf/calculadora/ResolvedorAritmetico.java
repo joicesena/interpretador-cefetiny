@@ -5,7 +5,6 @@ import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
-import br.cefetmg.inf.tiny.memoria.Variavel;
 import br.cefetmg.inf.util.Conversor;
 
 public final class ResolvedorAritmetico extends Resolvedor {

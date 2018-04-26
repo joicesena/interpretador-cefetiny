@@ -1,7 +1,4 @@
-a := 3
-while (a=3) do
-println(a)
-a := 1 + a 
-println(a)
-endwhile
-en
+for i := 0 to 10 do
+println(i)
+endfor
+end

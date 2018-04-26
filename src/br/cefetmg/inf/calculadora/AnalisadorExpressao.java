@@ -1,6 +1,5 @@
 package br.cefetmg.inf.calculadora;
 
-import static br.cefetmg.inf.calculadora.Resolvedor.elementoAtual;
 import br.cefetmg.inf.util.Dicionarios;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
@@ -225,6 +224,7 @@ public final class AnalisadorExpressao {
 
     //Estado operador lógico
     private static void estado9() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
+        Object elementoAnterior = elementoAtual;
         recebeProximo();
 
         if (elementoAtual.equals("(")) {
@@ -233,15 +233,21 @@ public final class AnalisadorExpressao {
             estado3();
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
+        } else if (elementoAnterior.equals("=") && elementoAtual.equals("\"")) {
+            estado10();
         } else {
             estadoErro("Expressão:\n\telemento inválido após operador lógico");
         }
     }
 
-    //Estado "
+    //Estado '"'
     private static void estado10() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
+        String strCompleta = "";
+        
         do {
+            strCompleta += elementoAtual;
             recebeProximo();
+            
             if (terminaAutomato == true) {
                 return;
             } else if (elementoAtual.equals("\"")) {
@@ -250,6 +256,15 @@ public final class AnalisadorExpressao {
         } while (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.ALFABETO)
                  || (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.INTEIROS)
                      || elementoAtual.equals("\"")));
+        
+        if (elementoAtual.equals("=") || elementoAtual.equals("+")) {
+            pBase.empilha(strCompleta);
+            recebeProximo();
+            
+            estado10();
+        } else {
+            estadoErro("Expressão:\n\telemento inválido após string");
+        }
     }
 
     private static void estadoFinal() throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
@@ -258,6 +273,21 @@ public final class AnalisadorExpressao {
 
     private static void estadoErro(String mensagem) throws ExcecaoExpressaoInvalida {
         throw new ExcecaoExpressaoInvalida(mensagem);
+    }
+    
+    public static String tipoElemento(Object elemento) {
+        String tipoElemento = "";
+        if (elemento instanceof Integer) {
+            tipoElemento = "int";
+        } else if (elemento instanceof Double) {
+            tipoElemento = "double";
+        } else if (elemento instanceof String 
+                && (((String) elemento).startsWith("\"") && ((String) elemento).endsWith("\""))) {
+            tipoElemento = "string";
+        } else {
+            //tipoElemento = "operador";
+        }
+        return tipoElemento;
     }
 
     public static String tipoExpressao(Pilha pBase) throws ExcecaoPilhaVazia {
