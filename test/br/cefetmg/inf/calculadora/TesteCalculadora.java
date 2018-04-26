@@ -29,6 +29,7 @@ public class TesteCalculadora {
                                                                              {"(true) and (false)", "false"},
                                                                              {"not((true) and (false))", "true"},
                                                                              {"2>1", "true"}, 
+                                                                             {"2<2", "false"}, 
                                                                              {"2>=2", "true"}, 
                                                                              {"2>=3", "false"}, 
                                                                              {"(2=3) or (2=2)", "true"}, 
@@ -37,7 +38,8 @@ public class TesteCalculadora {
                                                                              {"10 <> 10", "false"}, 
                                                                              {"10<20", "true"}, 
                                                                              {"10<=10", "true"}, 
-                                                                             {"100<=99", "false"}};
+                                                                             {"100<=99", "false"},
+                                                                             {"c<2", "false"}};
 
     private static final String[] TESTE_DE_EXCECOES = new String[]{"2++1", 
                                                                    "(-1+2)", 
@@ -58,6 +60,7 @@ public class TesteCalculadora {
         variaveis = EstruturaMemoria.getInstancia();
         variaveis.armazenaVariavel("a", "25+(14+(25*4+40-(20/2+10)))");
         variaveis.armazenaVariavel("b", "(((8*4+3)/7+(3+15/5)*3)*2-(19-7)/6)*2+12");
+        variaveis.armazenaVariavel("c", "2");
         //
         System.out.println("########################CALCULADORA########################");
         if (!variaveis.listaVazia()) {

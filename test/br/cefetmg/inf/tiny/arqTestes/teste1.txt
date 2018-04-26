@@ -1,0 +1,5 @@
+a := 3
+while (a=3) do
+println("loopzao")
+endwhile
+end

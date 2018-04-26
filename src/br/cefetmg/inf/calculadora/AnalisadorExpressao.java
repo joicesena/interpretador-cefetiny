@@ -35,7 +35,7 @@ public final class AnalisadorExpressao {
 
         pCopia = new Pilha();
         pBase = pEntrada;
-
+        
         estado0();
 
         return pCopia;

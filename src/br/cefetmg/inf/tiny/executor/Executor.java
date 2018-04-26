@@ -16,7 +16,7 @@ import br.cefetmg.inf.util.Dicionarios;
 public final class Executor {
     private static Fila filaExecucao;
     
-    public static void executaPrograma(Fila filaAnalisada) throws ExcecaoExpressaoInvalida {
+    public static void executaPrograma(Fila filaAnalisada) throws ExcecaoExpressaoInvalida, ExcecaoFilaVazia {
         filaExecucao = filaAnalisada;
         try {
             Object temp = null;        

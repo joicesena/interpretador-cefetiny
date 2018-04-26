@@ -1,5 +1,7 @@
 package br.cefetmg.inf.calculadora;
 
+import static br.cefetmg.inf.calculadora.ResolvedorAritmetico.possuiVariaveis;
+import static br.cefetmg.inf.calculadora.ResolvedorAritmetico.resolveVariaveis;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
@@ -7,23 +9,27 @@ import br.cefetmg.inf.util.Conversor;
 
 public final class ResolvedorLogico extends Resolvedor {
 
-    private static final Object[] operadores_logico1 = {"=", "not", "and", "or"};
-    private static final Object[] operadores_logico2 = {"<>", "not", "and", "or"};
-    private static final Object[] operadores_logico3 = {">", "not", "and", "or"};
-    private static final Object[] operadores_logico4 = {"<", "not", "and", "or"};
-    private static final Object[] operadores_logico5 = {">=", "not", "and", "or"};
-    private static final Object[] operadores_logico6 = {"<=", "not", "and", "or"};
+    private static final Object[] OPS_LOGICOS1 = {"=", "not", "and", "or"};
+    private static final Object[] OPS_LOGICOS2 = {"<>", "not", "and", "or"};
+    private static final Object[] OPS_LOGICOS3 = {">", "not", "and", "or"};
+    private static final Object[] OPS_LOGICOS4 = {"<", "not", "and", "or"};
+    private static final Object[] OPS_LOGICOS5 = {">=", "not", "and", "or"};
+    private static final Object[] OPS_LOGICOS6 = {"<=", "not", "and", "or"};
 
     public static Pilha resolveExpressaoLogica(Pilha pBase) throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
         Pilha pAux = new Pilha();
         //
+        if (possuiVariaveis(pBase, pAux)) {
+            resolveVariaveis(pBase, pAux);
+        }
+        
         for (int i = 0; i < 4; i++) {
             do {
                 elementoAtual = pBase.desempilha();
 
-                if (elementoAtual.equals(operadores_logico1[i]) || elementoAtual.equals(operadores_logico2[i])
-                        || elementoAtual.equals(operadores_logico3[i]) || elementoAtual.equals(operadores_logico4[i])
-                        || elementoAtual.equals(operadores_logico5[i]) || elementoAtual.equals(operadores_logico6[i])) {
+                if (elementoAtual.equals(OPS_LOGICOS1[i]) || elementoAtual.equals(OPS_LOGICOS2[i])
+                        || elementoAtual.equals(OPS_LOGICOS3[i]) || elementoAtual.equals(OPS_LOGICOS4[i])
+                        || elementoAtual.equals(OPS_LOGICOS5[i]) || elementoAtual.equals(OPS_LOGICOS6[i])) {
                     operador = (String) elementoAtual;
                     operando2 = pBase.desempilha();
 

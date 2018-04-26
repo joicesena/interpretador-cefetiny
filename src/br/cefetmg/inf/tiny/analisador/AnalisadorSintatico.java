@@ -708,6 +708,7 @@ public final class AnalisadorSintatico extends Analisador {
                     } else {
                         expressaoAtribuicao += proxTermo;
                         if ((!Dicionarios.procuraElementoNoDicionario(proxProxTermo, Dicionarios.LISTA_COMANDOS) && !proxProxTermo.equals("flag"))) {
+                            termosCodigo.voltaUmTermo();
                             proxTermo = termosCodigo.retornaProxTermo();
                         } else {
                             break;
@@ -755,6 +756,7 @@ public final class AnalisadorSintatico extends Analisador {
         filaExecucao.insereFila(nomeVar);
         filaExecucao.insereFila(atribuidor);
         filaExecucao.insereFila(valorVar);
+        
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("O programa não termina como o esperado");
         } else {
