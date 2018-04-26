@@ -50,7 +50,7 @@ public final class ComandoWhile extends Comando {
                 filaComandosWhile.insereFila(elementoFilaExecucao);
             }
         }
-
+        
         Fila filaExecucaoWhile = new Fila();
 
         // executa o while
@@ -64,6 +64,10 @@ public final class ComandoWhile extends Comando {
             } else {
                 continuaWhile = false;
             }
+        }
+        
+        if(!filaComandoAtual.filaVazia()) {
+            Executor.executaPrograma(filaComandoAtual);
         }
     }
 

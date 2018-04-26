@@ -31,7 +31,7 @@ public final class ComandoIf extends Comando{
     }
 
     @Override
-    public void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida {
+    public void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
         pilhaIf = new Pilha();
         executaThen = new Fila();
         executaElse = new Fila();
@@ -81,7 +81,9 @@ public final class ComandoIf extends Comando{
                     } else {
                         executaElse.insereFila(tempFila);
                     } 
-                } 
+                } else if(!filaComandoAtual.filaVazia()) {
+                    Executor.executaPrograma(filaComandoAtual);
+                }  
                 
             } else {
                 if (!flagElse){

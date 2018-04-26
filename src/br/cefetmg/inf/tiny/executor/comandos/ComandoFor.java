@@ -78,6 +78,10 @@ public final class ComandoFor extends Comando {
             }
             variaveis.alteraValorVariavel(nomeVar, atribuicaoFor);
         }
+        
+        if(!filaComandoAtual.filaVazia()) {
+            Executor.executaPrograma(filaComandoAtual);
+        }  
     }
 
     @Override
