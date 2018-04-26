@@ -646,11 +646,8 @@ public final class AnalisadorSintatico extends Analisador {
     //
     @Override
     protected void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico {
-        
         String expressaoAtribuicao = "";
         char[] caracteresExp;
-        
-        Fila filaAnalise = new Fila();
         
         String proxTermo;
         proxTermo = termosCodigo.retornaProxTermo();
@@ -687,6 +684,34 @@ public final class AnalisadorSintatico extends Analisador {
                         // volta para o termo anterior
                         termosCodigo.voltaUmTermo();
                         break;
+                    }
+                } else {
+                    String proxProxTermo = termosCodigo.retornaProxTermo();
+                    if (proxProxTermo.contains(":")) {
+                        temMaisAtribuicao = true;
+                        // se o termo tiver :
+                        if (proxProxTermo.startsWith(":")) {
+                            // se for a primeira coisa do termo, vai ficar como [var] [:=] [exp]
+                            // volta para [var]
+                            termosCodigo.voltaUmTermo();
+                            //volta para antes de [var]
+                            termosCodigo.voltaUmTermo();
+                            break;
+                        } else {
+                            // não é o primeiro caractere do termo
+                            // seria algo como [var[:=]]
+                            // volta para o termo anterior
+                            expressaoAtribuicao += proxTermo;
+                            termosCodigo.voltaUmTermo();
+                            break;
+                        }
+                    } else {
+                        expressaoAtribuicao += proxTermo;
+                        if ((!Dicionarios.procuraElementoNoDicionario(proxProxTermo, Dicionarios.LISTA_COMANDOS) && !proxProxTermo.equals("flag"))) {
+                            proxTermo = termosCodigo.retornaProxTermo();
+                        } else {
+                            break;
+                        }
                     }
                 }
             }
