@@ -32,7 +32,7 @@ public class InterfaceConsole {
         
         
         try {
-            LeitorDeArquivo.LeitorDeArquivo(caminhoArquivoTexto); 
+            LeitorDeArquivo.LeitorDeArquivo("test/arqTestes/1.txt"); 
             
         } catch(FileNotFoundException e) {
            System.err.println("\nErro: O arquivo '" + caminhoArquivoTexto + "' não foi encontrado."
