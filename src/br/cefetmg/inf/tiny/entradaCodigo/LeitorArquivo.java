@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public final class LeitorDeArquivo {
+public final class LeitorArquivo {
 
     private static String caminhoArquivo = null;
     private static File arquivo = null;
     private static Scanner scannerArquivo;
     private static String codigo = null;
 
-    public static void LeitorDeArquivo(String caminhoArquivoTexto) throws FileNotFoundException {
+    public static void leArquivo(String caminhoArquivoTexto) throws FileNotFoundException {
 
         caminhoArquivo = caminhoArquivoTexto;
         arquivo = new File(caminhoArquivo);

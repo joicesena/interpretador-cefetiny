@@ -1,5 +1,7 @@
 a := 3
 while (a=3) do
-println("loopzao")
+println(a)
+a := 1 + a 
+println(a)
 endwhile
-end
+en

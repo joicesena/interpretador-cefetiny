@@ -4,13 +4,15 @@ import br.cefetmg.inf.calculadora.AnalisadorExpressao;
 import br.cefetmg.inf.calculadora.Calculadora;
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.Executor;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
 
-public class ComandoFor extends Comando{
+public final class ComandoFor extends Comando {
+
     private static EstruturaMemoria variaveis;
     private int atribuicaoFor;
     private String nomeVar;
@@ -22,77 +24,64 @@ public class ComandoFor extends Comando{
         super(parametro);
     }
 
-    public ComandoFor(Fila filaComandoAtual) {
+    public ComandoFor(Fila filaComandoAtual) throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
         super(filaComandoAtual);
         variaveis = EstruturaMemoria.getInstancia();
 
         filaComandosFor = new Fila();
-        
-        try {
-            analisa();
-            executaComando();
-            variaveis.removeVariavel(nomeVar);
-        } catch (ExcecaoFilaVazia | ExcecaoExpressaoInvalida | ExcecaoPilhaVazia ex) {
-            System.err.println(ex.getMessage());
-        }
+
+        analisa();
+        executaComando();
+        variaveis.removeVariavel(nomeVar);
+
     }
 
     @Override
-    public void executaComando()  throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida{
+    public void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
         Pilha pilhaFor = new Pilha();
         pilhaFor.empilha("for");
 
         boolean acabouFor = false;
         Object elementoFila;
 
-        try {
-            // coloca os elementos da fila recebida na fila de execução interna do for
-
-            while (!acabouFor) {
-                elementoFila = filaComandoAtual.removeFila();
-                filaComandosFor.insereFila(elementoFila);
-                if (((String)elementoFila).equals("endfor")) {
-                    pilhaFor.desempilha();
-                    if (pilhaFor.pilhaVazia())
-                        acabouFor = true;
-                } else if (((String)elementoFila).equals("for")) {
-                    pilhaFor.empilha(elementoFila);
+        // coloca os elementos da fila recebida na fila de execução interna do for
+        while (!acabouFor) {
+            elementoFila = filaComandoAtual.removeFila();
+            filaComandosFor.insereFila(elementoFila);
+            if (((String) elementoFila).equals("endfor")) {
+                pilhaFor.desempilha();
+                if (pilhaFor.pilhaVazia()) {
+                    acabouFor = true;
                 }
+            } else if (((String) elementoFila).equals("for")) {
+                pilhaFor.empilha(elementoFila);
             }
-
-            Fila filaExecucao = new Fila();
-            
-            // executa o for
-            boolean continuaFor = true;
-            while (continuaFor) {
-                copiaFila(filaComandosFor, filaExecucao);
-                Executor.executaPrograma(filaExecucao);
-                if (tipoOperacao.equals("to")) {
-                    atribuicaoFor++;
-                } else {
-                    atribuicaoFor--;
-                }
-                if (atribuicaoFor == valorComparacao) {
-                    continuaFor = false;
-                }
-                variaveis.alteraValorVariavel(nomeVar, atribuicaoFor);
-            }
-            
-        } catch (ExcecaoFilaVazia ex) {
-            System.err.println(ex.getMessage());
-        } catch (ExcecaoPilhaVazia ex) {
-            System.err.println(ex.getMessage());
-//        } catch (ExcecaoExpressaoInvalida ex) {
-//            System.err.println(ex.getMessage());
         }
 
+        Fila filaExecucao = new Fila();
+
+        // executa o for
+        boolean continuaFor = true;
+        while (continuaFor) {
+            copiaFila(filaComandosFor, filaExecucao);
+            Executor.executaPrograma(filaExecucao);
+            if (tipoOperacao.equals("to")) {
+                atribuicaoFor++;
+            } else {
+                atribuicaoFor--;
+            }
+            if (atribuicaoFor == valorComparacao) {
+                continuaFor = false;
+            }
+            variaveis.alteraValorVariavel(nomeVar, atribuicaoFor);
+        }
     }
 
     @Override
     public void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida {
         // remove for
         Object temp = filaComandoAtual.removeFila();
-        
+
         // temp = nome da variável
         temp = filaComandoAtual.removeFila();
         if (!AnalisadorExpressao.nomeVariavelProcede(temp.toString())) {
@@ -105,10 +94,10 @@ public class ComandoFor extends Comando{
 
         //temp = valorVar
         temp = filaComandoAtual.removeFila();
-        
+
         Object resultadoExpressao = ((Calculadora.iniciaCalculadora(temp.toString())));
-        
-        if ( !(resultadoExpressao instanceof Integer)) { 
+
+        if (!(resultadoExpressao instanceof Integer)) {
             throw new ExcecaoExpressaoInvalida("Comando 'for': valor atribuído à variável não é inteiro");
         }
         atribuicaoFor = (int) resultadoExpressao;
@@ -122,13 +111,13 @@ public class ComandoFor extends Comando{
         //temp = condição parada
         temp = filaComandoAtual.removeFila();
         resultadoExpressao = ((Calculadora.iniciaCalculadora(temp.toString())));
-        
+
         if (resultadoExpressao instanceof Integer) {
-            valorComparacao = (Integer)resultadoExpressao;
+            valorComparacao = (Integer) resultadoExpressao;
         } else {
             throw new ExcecaoExpressaoInvalida("Comando 'for': condição de parada não é inteiro");
         }
-        
+
         if (tipoOperacao.equals("to")) {
             if (atribuicaoFor > valorComparacao) {
                 throw new ExcecaoExpressaoInvalida("Comando 'for': valor da condição de parada deveria ser maior que o valor da variável");
@@ -142,7 +131,7 @@ public class ComandoFor extends Comando{
         temp = filaComandoAtual.removeFila();
     }
 
-    public void copiaFila (Fila filaOriginal, Fila filaCopia) throws ExcecaoFilaVazia {
+    public void copiaFila(Fila filaOriginal, Fila filaCopia) throws ExcecaoFilaVazia {
         Fila filaTemp = new Fila();
         Object temp;
         while (!filaOriginal.filaVazia()) {
@@ -156,5 +145,4 @@ public class ComandoFor extends Comando{
         }
     }
 
-    
 }

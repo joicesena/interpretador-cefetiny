@@ -1,9 +1,9 @@
 package br.cefetmg.inf.tiny.analisador;
 
 import br.cefetmg.inf.tiny.analisador.analisadorSemantico.AnalisadorSemantico;
-import br.cefetmg.inf.tiny.analisador.Analisador;
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
@@ -14,7 +14,7 @@ import br.cefetmg.inf.util.Dicionarios;
 public final class AnalisadorSintatico extends Analisador {
 
     private static AnalisadorSintatico instancia;
-    
+
     private static AnalisadorSemantico analisadorSemantico;
 
     private SeparadorSintatico termosCodigo;
@@ -23,110 +23,103 @@ public final class AnalisadorSintatico extends Analisador {
 
     private boolean temComandoBloco;
 
-    private AnalisadorSintatico(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
+    private AnalisadorSintatico(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida {
         temComandoBloco = false;
-        
+
         filaExecucao = new Fila();
-        
+
         pilhaComandos = new Pilha();
-        
+
         termosCodigo = new SeparadorSintatico(codigo);
         //
         this.analisa();
-        
+
         Executor.executaPrograma(filaExecucao);
     }
 
-    public static synchronized AnalisadorSintatico getInstancia(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
+    public static synchronized AnalisadorSintatico getInstancia(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida {
         if (instancia == null) {
             instancia = new AnalisadorSintatico(codigo);
         }
         return instancia;
     }
-    
+
     @Override
-    public void analisa() {
-        try {
-            termo = termosCodigo.retornaProxTermo();
-            if (Dicionarios.procuraElementoNoDicionario(termo, Dicionarios.LISTA_COMANDOS)) {
-                filaExecucao.insereFila(termo);
-                switch (Dicionarios.qualComando(termo)) {
-                    // print
-                    case 0:
-                        analisaPrint();
-                        break;
-                    // println
-                    case 1:
-                        analisaPrint();
-                        break;
-                    //"readInt",    2
-                    case 2:
-                        analisaReadInt();
-                        break;
-                    //"if",         3
-                    case 3:
-                        temComandoBloco = true;
-                        analisaIf();
-                        break;
-                    //"then",       4
-                    //                case 4:
-                    //                    break;
-                    //"else",       5
-                    case 5:
-                        analisaElse();
-                        break;
-                    //"endif",      6
-                    case 6:
-                        analisaEndif();
-                        break;
-                    //"while",      7
-                    case 7:
-                        temComandoBloco = true;
-                        analisaWhile();
-                        break;
-                    //"do",         8
-                    //                case 8:
-                    //                    break;
-                    //"endwhile",   9
-                    case 9:
-                        analisaEndwhile();
-                        break;
-                    //"for",        10
-                    case 10:
-                        temComandoBloco = true;
-                        analisaFor();
-                        break;
-                    //"to",         11
-                    //                case 11:
-                    //                    break;
-                    //"downto",     12
-                    //                case 12:
-                    //                    break;
-                    //"endfor"      13
-                    case 13:
-                        analisaEndfor();
-                        break;
-                    // end
-                    case 14:
-                        analisaEnd();
-                        break;
-                }
-            } else {
-                char[] caracteresTermo = termo.toCharArray();
-                if (!verificaSeAlfaMin(caracteresTermo[0])) {
-                    throw new ExcecaoErroSintatico("Caractere não permitido no início de um comando");
-                } else {
-                    termosCodigo.voltaUmTermo();
-                    analisaAtribuicao();
-                }
+    public void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoErroSintatico {
+        termo = termosCodigo.retornaProxTermo();
+        if (Dicionarios.procuraElementoNoDicionario(termo, Dicionarios.LISTA_COMANDOS)) {
+            filaExecucao.insereFila(termo);
+            switch (Dicionarios.qualComando(termo)) {
+                // print
+                case 0:
+                    analisaPrint();
+                    break;
+                // println
+                case 1:
+                    analisaPrint();
+                    break;
+                //"readInt",    2
+                case 2:
+                    analisaReadInt();
+                    break;
+                //"if",         3
+                case 3:
+                    temComandoBloco = true;
+                    analisaIf();
+                    break;
+                //"then",       4
+                //                case 4:
+                //                    break;
+                //"else",       5
+                case 5:
+                    analisaElse();
+                    break;
+                //"endif",      6
+                case 6:
+                    analisaEndif();
+                    break;
+                //"while",      7
+                case 7:
+                    temComandoBloco = true;
+                    analisaWhile();
+                    break;
+                //"do",         8
+                //                case 8:
+                //                    break;
+                //"endwhile",   9
+                case 9:
+                    analisaEndwhile();
+                    break;
+                //"for",        10
+                case 10:
+                    temComandoBloco = true;
+                    analisaFor();
+                    break;
+                //"to",         11
+                //                case 11:
+                //                    break;
+                //"downto",     12
+                //                case 12:
+                //                    break;
+                //"endfor"      13
+                case 13:
+                    analisaEndfor();
+                    break;
+                // end
+                case 14:
+                    analisaEnd();
+                    break;
             }
-        } catch (ExcecaoErroSintatico erro) {
-            System.err.println(erro.getMessage());
-        } catch (ExcecaoPilhaVazia erro) {
-            System.err.println(erro.getMessage());
-        } catch (ExcecaoFilaVazia erro) {
-            System.err.println(erro.getMessage());
+        } else {
+            char[] caracteresTermo = termo.toCharArray();
+            if (!verificaSeAlfaMin(caracteresTermo[0])) {
+                throw new ExcecaoErroSintatico("Caractere não permitido no início de um comando");
+            } else {
+                termosCodigo.voltaUmTermo();
+                analisaAtribuicao();
+            }
         }
+
     }
 
     //
@@ -645,13 +638,13 @@ public final class AnalisadorSintatico extends Analisador {
     //  INÍCIO MÉTODO DE ANALISE DO COMANDO DE ATRIBUIÇÃO
     //
     @Override
-    protected void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico {
+    protected void analisaAtribuicao() throws ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoPilhaVazia {
         String expressaoAtribuicao = "";
         char[] caracteresExp;
-        
+
         String proxTermo;
         proxTermo = termosCodigo.retornaProxTermo();
-        
+
         boolean achouAtribuidor = false;
         boolean temMaisAtribuicao = false;
 
@@ -661,7 +654,7 @@ public final class AnalisadorSintatico extends Analisador {
                 // se não achou atribuidor, faz parte da expressaoAtribuicao
                 expressaoAtribuicao += proxTermo;
                 if (proxTermo.contains(":")) {
-                    if ((proxTermo.charAt((proxTermo.indexOf(":"))+1)) == '=') {
+                    if ((proxTermo.charAt((proxTermo.indexOf(":")) + 1)) == '=') {
                         achouAtribuidor = true;
                     }
                 }
@@ -756,7 +749,7 @@ public final class AnalisadorSintatico extends Analisador {
         filaExecucao.insereFila(nomeVar);
         filaExecucao.insereFila(atribuidor);
         filaExecucao.insereFila(valorVar);
-        
+
         if (proxTermo.equals("flag")) {
             throw new ExcecaoErroSintatico("O programa não termina como o esperado");
         } else {
@@ -767,7 +760,7 @@ public final class AnalisadorSintatico extends Analisador {
                 analisaAtribuicao();
             }
         }
-        
+
     }
     //
     //  FIM MÉTODO DE ANALISE DO COMANDO DE ATRIBUIÇÃO

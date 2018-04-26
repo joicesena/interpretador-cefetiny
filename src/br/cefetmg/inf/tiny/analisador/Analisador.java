@@ -27,7 +27,7 @@ public abstract class Analisador {
         Analisador.pilhaComandos = pilhaComandos;
     }
     
-    public abstract void analisa() throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia;
+    public abstract void analisa() throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico;
     
     protected abstract void analisaPrint() throws ExcecaoExpressaoInvalida, ExcecaoErroSintatico, ExcecaoPilhaVazia, ExcecaoFilaVazia;
     

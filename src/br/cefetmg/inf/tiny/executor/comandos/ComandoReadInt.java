@@ -3,6 +3,7 @@ package br.cefetmg.inf.tiny.executor.comandos;
 import java.util.Scanner;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import java.util.InputMismatchException;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 
@@ -11,7 +12,7 @@ public final class ComandoReadInt extends Comando{
     int valorRecebido;
     String nomeVariavel = null;
 
-    public ComandoReadInt(String parametro) throws ExcecaoExpressaoInvalida {
+    public ComandoReadInt(String parametro) throws ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
         super(parametro); 
         this.analisa();
     }
@@ -28,14 +29,12 @@ public final class ComandoReadInt extends Comando{
     }
 
     @Override
-    public void analisa() throws ExcecaoExpressaoInvalida {
+    public void analisa() throws ExcecaoEntradaInvalida, ExcecaoExpressaoInvalida {
         try {
             valorRecebido = entrada.nextInt();   
         } catch(InputMismatchException e) {
-            System.err.println("\nErro: A entrada recebida não é do tipo inteiro.");
-            System.exit(0);
+            throw new ExcecaoEntradaInvalida("Comando 'readInt':\n\to parâmetro passado não é inteiro");
         } 
         this.executaComando();
     }
-    
 }

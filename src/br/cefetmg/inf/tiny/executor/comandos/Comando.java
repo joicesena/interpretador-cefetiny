@@ -1,6 +1,7 @@
 package br.cefetmg.inf.tiny.executor.comandos;
 
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
@@ -22,7 +23,7 @@ public abstract class Comando {
         variaveis = EstruturaMemoria.getInstancia();
     }
     
-    public abstract void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida;
+    public abstract void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida;
     
-    public abstract void analisa() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida;
+    public abstract void analisa() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida;
 }
