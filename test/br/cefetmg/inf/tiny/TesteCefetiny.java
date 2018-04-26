@@ -3,6 +3,8 @@ package br.cefetmg.inf.tiny;
 import br.cefetmg.inf.tiny.analisador.AnalisadorSintatico;
 import br.cefetmg.inf.tiny.entradaCodigo.LeitorArquivo;
 import br.cefetmg.inf.tiny.estruturasDados.Pilha;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
@@ -45,7 +47,7 @@ public class TesteCefetiny {
     }
 
     @Test
-    public void testeCefetiny() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, FileNotFoundException, ExcecaoFilaVazia {
+    public void testeCefetiny() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, FileNotFoundException, ExcecaoFilaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida {
         LeitorArquivo.leArquivo("test/br/cefetmg/inf/tiny/arqTestes/teste1.txt");
         AnalisadorSintatico aS = AnalisadorSintatico.getInstancia(LeitorArquivo.getCodigo());
         assert true;

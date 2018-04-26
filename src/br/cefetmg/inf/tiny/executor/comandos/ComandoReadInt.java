@@ -4,8 +4,8 @@ import java.util.Scanner;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
 import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
-import java.util.InputMismatchException;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
+import java.util.InputMismatchException;
 
 public final class ComandoReadInt extends Comando{
     Scanner entrada = new Scanner(System.in);
@@ -15,10 +15,7 @@ public final class ComandoReadInt extends Comando{
     public ComandoReadInt(String parametro) throws ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
         super(parametro); 
         this.analisa();
-    }
-
-    public ComandoReadInt(Fila filaComandoAtual) {
-        super(filaComandoAtual);
+        this.executaComando();
     }
 
     @Override
@@ -35,6 +32,5 @@ public final class ComandoReadInt extends Comando{
         } catch(InputMismatchException e) {
             throw new ExcecaoEntradaInvalida("Comando 'readInt':\n\to parâmetro passado não é inteiro");
         } 
-        this.executaComando();
     }
 }

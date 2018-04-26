@@ -1,9 +1,9 @@
 package br.cefetmg.inf.tiny.interfaceConsole;
 
 import java.util.Scanner;
-import br.cefetmg.inf.tiny.entradaCodigo.*;
 import java.io.FileNotFoundException;
 import br.cefetmg.inf.tiny.analisador.AnalisadorSintatico;
+import br.cefetmg.inf.tiny.entradaCodigo.LeitorArquivo;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
@@ -26,7 +26,7 @@ public class InterfaceConsole {
         
         
         try {
-            LeitorArquivo.leArquivo("test\\br\\cefetmg\\inf\\tiny\\arqTestes\\teste1.txt"); 
+            LeitorArquivo.leArquivo(caminhoArquivoTexto); 
         } catch(FileNotFoundException e) {
            System.err.println("\nErro: O arquivo '" + caminhoArquivoTexto + "' não foi encontrado."
                                 + " Verifique se você digitou o caminho corretamente.");

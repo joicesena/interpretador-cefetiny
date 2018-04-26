@@ -15,7 +15,7 @@ public final class LeitorArquivo {
 
         caminhoArquivo = caminhoArquivoTexto;
         arquivo = new File(caminhoArquivo);
-        scannerArquivo = new Scanner(arquivo);
+        scannerArquivo = new Scanner(arquivo, "ISO-8859-1");
 
         while (scannerArquivo.hasNextLine()) {
             String linha = scannerArquivo.nextLine();
