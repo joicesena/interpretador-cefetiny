@@ -38,7 +38,7 @@ public final class Conversor {
         String[] numero = strNumero.split("");
 
         Object numeroFinal = strNumero;
-        //
+
         if (Dicionarios.procuraElementoNoDicionario(numero[0], Dicionarios.INTEIROS)) {
             while (i < numero.length && (Dicionarios.procuraElementoNoDicionario(numero[i], Dicionarios.INTEIROS)
                                          || numero[i].equals("."))) {

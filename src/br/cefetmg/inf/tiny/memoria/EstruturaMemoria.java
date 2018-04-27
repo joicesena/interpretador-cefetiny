@@ -1,5 +1,6 @@
 package br.cefetmg.inf.tiny.memoria;
 
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.util.Dicionarios;
 
@@ -72,11 +73,9 @@ public class EstruturaMemoria<Dado> {
 
         varAlterada.setConteudo(valorVar);
         varAlterada.setTipo(determinaTipo(valorVar));
-
-//        System.out.println("variável alterada! " + varAlterada.getNomeVar() + " agora é igual a " + varAlterada.getDado());
     }
 
-    public void removeVariavel(String nomeVar) {
+    public void removeVariavel(String nomeVar) throws ExcecaoListaVazia {
         if (!listaVazia()) {
             // a lista não está vazia: há variáveis que podem ser removidas
             Variavel temp = primeiraVar;
@@ -93,11 +92,9 @@ public class EstruturaMemoria<Dado> {
                             ultimaVar = temp;
                         }
 
-//                        System.out.println("variável " + temp.getProxNodo().getNomeVar() + " removida");
                         // "pula" um nodo -> não será acessado mais, variável excluída da lista
                         temp.setProxNodo((temp.getProxNodo()).getProxNodo());
 
-//                        System.out.println("variável " + temp.getNomeVar() + " agr é sucedida por " + temp.getProxNodo().getNomeVar());
                         return;
                     } else {
                         temp = temp.getProxNodo();
@@ -105,7 +102,7 @@ public class EstruturaMemoria<Dado> {
                 }
             }
         } else {
-//            System.out.println("Não é possível remover a variável. A memória está vazia!");
+            throw new ExcecaoListaVazia();
         }
     }
 

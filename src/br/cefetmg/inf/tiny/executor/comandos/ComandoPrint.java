@@ -47,7 +47,7 @@ public final class ComandoPrint extends Comando{
             String saidaFinal = "";
             String strAux = "";
             String[] vetParam = parametro.split("");
-            //
+
             do {
                 if (vetParam[i].equals("\"")) {
                     while (contaAspas != 2 && i < vetParam.length) {
@@ -92,7 +92,6 @@ public final class ComandoPrint extends Comando{
             parametro = saidaFinal;
             tipoImpressao = 3;
         }
-
         executaComando();
     }
 }

@@ -2,7 +2,6 @@ package br.cefetmg.inf.tiny.executor.comandos;
 
 import java.util.Scanner;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
-import br.cefetmg.inf.tiny.estruturasDados.Fila;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import java.util.InputMismatchException;

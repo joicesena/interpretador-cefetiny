@@ -6,6 +6,7 @@ import br.cefetmg.inf.calculadora.Calculadora;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.Executor;
 
@@ -15,14 +16,14 @@ public final class ComandoIf extends Comando{
     Pilha pilhaIf;
     String expressaoIf = null;
   
-    public ComandoIf(Fila filaComandoAtual) throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
+    public ComandoIf(Fila filaComandoAtual) throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         super(filaComandoAtual);
         this.analisa();
         this.executaComando();
     }
 
     @Override
-    public void executaComando() throws ExcecaoExpressaoInvalida, ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoEntradaInvalida {
+    public void executaComando() throws ExcecaoExpressaoInvalida, ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         if (((Calculadora.iniciaCalculadora(expressaoIf)).toString()).equals("true")) {
             Executor.executaPrograma(executaThen);
         } else {
@@ -31,7 +32,7 @@ public final class ComandoIf extends Comando{
     }
 
     @Override
-    public void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
+    public void analisa() throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         pilhaIf = new Pilha();
         executaThen = new Fila();
         executaElse = new Fila();

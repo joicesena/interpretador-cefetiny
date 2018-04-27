@@ -7,6 +7,7 @@ import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.Executor;
 import br.cefetmg.inf.tiny.memoria.EstruturaMemoria;
@@ -24,7 +25,7 @@ public final class ComandoFor extends Comando {
         super(parametro);
     }
 
-    public ComandoFor(Fila filaComandoAtual) throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
+    public ComandoFor(Fila filaComandoAtual) throws ExcecaoPilhaVazia, ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         super(filaComandoAtual);
         variaveis = EstruturaMemoria.getInstancia();
 
@@ -37,7 +38,7 @@ public final class ComandoFor extends Comando {
     }
 
     @Override
-    public void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
+    public void executaComando() throws ExcecaoListaVazia, ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
         Pilha pilhaFor = new Pilha();
         pilhaFor.empilha("for");
 

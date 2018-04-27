@@ -10,6 +10,7 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 
 public class InterfaceConsole {
@@ -47,7 +48,7 @@ public class InterfaceConsole {
                 AnalisadorSintatico.getInstancia(LeitorArquivo.getCodigo());
             }        
         } catch(ExcecaoArquivoNaoEncontrado | ExcecaoArquivoVazio | ExcecaoErroSintatico | ExcecaoFilaVazia | 
-                ExcecaoExpressaoInvalida | ExcecaoPilhaVazia | ExcecaoEntradaInvalida ex){
+                ExcecaoExpressaoInvalida | ExcecaoPilhaVazia | ExcecaoEntradaInvalida | ExcecaoListaVazia ex){
             System.err.println(ex.getMessage());
         }
     }

@@ -7,6 +7,7 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoErroSintatico;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.Executor;
 import br.cefetmg.inf.util.Dicionarios;
@@ -23,7 +24,7 @@ public final class AnalisadorSintatico extends Analisador {
 
     private boolean temComandoBloco;
 
-    private AnalisadorSintatico(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida {
+    private AnalisadorSintatico(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         temComandoBloco = false;
 
         filaExecucao = new Fila();
@@ -31,13 +32,12 @@ public final class AnalisadorSintatico extends Analisador {
         pilhaComandos = new Pilha();
 
         termosCodigo = new SeparadorSintatico(codigo);
-        //
         this.analisa();
 
         Executor.executaPrograma(filaExecucao);
     }
 
-    public static synchronized AnalisadorSintatico getInstancia(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida {
+    public static synchronized AnalisadorSintatico getInstancia(String codigo) throws ExcecaoFilaVazia, ExcecaoExpressaoInvalida, ExcecaoPilhaVazia, ExcecaoErroSintatico, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         if (instancia == null) {
             instancia = new AnalisadorSintatico(codigo);
         }
@@ -522,7 +522,6 @@ public final class AnalisadorSintatico extends Analisador {
         int cont;
         int posDoisPontos = -1;
         String nomeVar = "", atribuidor = "", valorVar = "";
-        //boolean achouDoisPontos = false;
         if (analisouParam) {
             caracteresExp = expressaoAtribuicaoFor.toCharArray();
             cont = 0;

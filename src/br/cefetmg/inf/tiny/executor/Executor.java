@@ -5,17 +5,14 @@ import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.comandos.*;
 import br.cefetmg.inf.util.Dicionarios;
 
-/**
- * tirar da fila de execução principal e adicionar numa fila temporária do
- * comando passar essa fila temporária como parâmetro pro comando
- */
 public final class Executor {
 
-    public static void executaPrograma(Fila filaExecucao) throws ExcecaoExpressaoInvalida, ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoEntradaInvalida {
+    public static void executaPrograma(Fila filaExecucao) throws ExcecaoExpressaoInvalida, ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         Object temp = null;
         while (!filaExecucao.filaVazia()) {
             temp = filaExecucao.removeFila();

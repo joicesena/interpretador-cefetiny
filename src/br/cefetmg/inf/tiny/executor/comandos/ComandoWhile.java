@@ -7,6 +7,7 @@ import br.cefetmg.inf.tiny.estruturasDados.Pilha;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoEntradaInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoExpressaoInvalida;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
+import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 import br.cefetmg.inf.tiny.executor.Executor;
 
@@ -15,7 +16,7 @@ public final class ComandoWhile extends Comando {
     Fila filaComandosWhile;
     String expressaoWhile;
 
-    public ComandoWhile(Fila filaComandoAtual) throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
+    public ComandoWhile(Fila filaComandoAtual) throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         super(filaComandoAtual);
 
         filaComandosWhile = new Fila();
@@ -26,7 +27,7 @@ public final class ComandoWhile extends Comando {
     }
 
     @Override
-    public void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida {
+    public void executaComando() throws ExcecaoFilaVazia, ExcecaoPilhaVazia, ExcecaoExpressaoInvalida, ExcecaoEntradaInvalida, ExcecaoListaVazia {
         Pilha pilhaWhile = new Pilha();
         Pilha pBase;
         pilhaWhile.empilha("while");
