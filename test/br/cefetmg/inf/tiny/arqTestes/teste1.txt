@@ -1,4 +1,23 @@
-for i := 0 to 10 do
-println(i)
-endfor
+vara := 5
+varb := 3
+varc := 6
+if (vara = 5) then
+    print("primeiro vdd")
+    readInt(qualquer)
+    if (varb = 3) then
+        println("tb eh vdd")
+        if (varc = 6) then
+            println("nem vai printar nada")
+        else 
+            println("esse vai")
+            readInt(qualquer2)
+        endif
+        println("acabou o if")
+    endif
+else 
+    readInt(qualquer3)
+endif
+print("otaria")
+println("vai se fude livia")
+
 end

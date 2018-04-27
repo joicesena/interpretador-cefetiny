@@ -40,7 +40,7 @@ public final class Calculadora {
         //
         pAnalisada = Organizador.organizaExpressaoNaPilha(expressaoBase);
         pAnalisada.invertePilha();
-
+        
         pAnalisada = AnalisadorExpressao.inicializaAutomato(pAnalisada);
         pAnalisada.invertePilha();
 

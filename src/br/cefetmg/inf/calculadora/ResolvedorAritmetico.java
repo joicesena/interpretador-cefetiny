@@ -37,9 +37,9 @@ public final class ResolvedorAritmetico extends Resolvedor {
                     operando2 = pBase.desempilha();
                     if (i > 0) {
                         operando1 = pAux.desempilha();
-                        pAux.empilha(resolveOperacaoBinaria(Conversor.converteObjectDouble(operando1),
+                        pAux.empilha(resolveOperacaoBinaria(operando1,
                                                             (String) operador,
-                                                            Conversor.converteObjectDouble(operando2)));
+                                                            operando2));
                     } else {
                         pAux.empilha(resolveOperacaoUnaria(Conversor.converteObjectInt(operando2)));
                     }
@@ -55,35 +55,41 @@ public final class ResolvedorAritmetico extends Resolvedor {
         return pBase;
     }
     
-    public static Object resolveOperacaoBinaria(double op1, String oper, double op2) {
+    public static Object resolveOperacaoBinaria(Object op1, String oper, Object op2) {
         boolean deveConverter = false;
-        double resultado = 0.0;
-
+        Object resultado = 0.0;
+        
         switch (oper) {
             case "*":
-                resultado = op1 * op2;
+                resultado = Conversor.converteObjectDouble(op1) * Conversor.converteObjectDouble(op2);
                 break;
 
             case "div":
-                resultado = op1 / op2;
+                resultado = Conversor.converteObjectDouble(op1) / Conversor.converteObjectDouble(op2);
                 deveConverter = true;
                 break;
 
             case "mod":
-                resultado = op1 % op2;
+                resultado = Conversor.converteObjectDouble(op1) % Conversor.converteObjectDouble(op2);
                 break;
 
             case "+":
-                resultado = op1 + op2;
+                if (AnalisadorExpressao.tipoElemento(op1).equals("string")
+                    && AnalisadorExpressao.tipoElemento(op2).equals("string")) {
+                    resultado = (op1.toString().substring(0, op1.toString().length() - 1) +
+                                (op2.toString().substring(1, op2.toString().length())));
+                } else {
+                    resultado = Conversor.converteObjectDouble(op1) + Conversor.converteObjectDouble(op2);
+                }
                 break;
 
             case "-":
-                resultado = op1 - op2;
+                resultado = Conversor.converteObjectDouble(op1) - Conversor.converteObjectDouble(op2);
                 break;
 
             case "/":
-                resultado = op1 / op2;
-                if (resultado - ((Double) resultado).intValue() == 0.0) {
+                resultado = Conversor.converteObjectDouble(op1) / Conversor.converteObjectDouble(op2);
+                if ((Double)resultado - ((Double) resultado).intValue() == 0.0) {
                     deveConverter = true;
                 }
                 break;

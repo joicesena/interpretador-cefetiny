@@ -22,14 +22,14 @@ public final class ResolvedorLogico extends Resolvedor {
         if (possuiVariaveis(pBase, pAux)) {
             resolveVariaveis(pBase, pAux);
         }
-        
+
         for (int i = 0; i < 4; i++) {
             do {
                 elementoAtual = pBase.desempilha();
 
                 if (elementoAtual.equals(OPS_LOGICOS1[i]) || elementoAtual.equals(OPS_LOGICOS2[i])
-                        || elementoAtual.equals(OPS_LOGICOS3[i]) || elementoAtual.equals(OPS_LOGICOS4[i])
-                        || elementoAtual.equals(OPS_LOGICOS5[i]) || elementoAtual.equals(OPS_LOGICOS6[i])) {
+                    || elementoAtual.equals(OPS_LOGICOS3[i]) || elementoAtual.equals(OPS_LOGICOS4[i])
+                    || elementoAtual.equals(OPS_LOGICOS5[i]) || elementoAtual.equals(OPS_LOGICOS6[i])) {
                     operador = (String) elementoAtual;
                     operando2 = pBase.desempilha();
 
@@ -37,8 +37,8 @@ public final class ResolvedorLogico extends Resolvedor {
                         case 0:
                             operando1 = pAux.desempilha();
                             pAux.empilha(resolveOperacaoRelacional(Conversor.converteObjectDouble(operando1),
-                                    (String) operador,
-                                    Conversor.converteObjectDouble(operando2)));
+                                                                   (String) operador,
+                                                                   Conversor.converteObjectDouble(operando2)));
                             break;
                         case 1:
                             pAux.empilha(resolveOperacaoUnaria((String) operando2));
@@ -47,8 +47,8 @@ public final class ResolvedorLogico extends Resolvedor {
                         case 3:
                             operando1 = pAux.desempilha();
                             pAux.empilha(resolveOperacaoBooleana((String) operando1,
-                                    (String) operador,
-                                    (String) operando2));
+                                                                 (String) operador,
+                                                                 (String) operando2));
                             break;
                     }
                 } else {
@@ -63,31 +63,37 @@ public final class ResolvedorLogico extends Resolvedor {
         return pBase;
     }
 
-    public static String resolveOperacaoRelacional(double op1, String oper, double op2) {
+    public static String resolveOperacaoRelacional(Object op1, String oper, Object op2) {
         boolean resultado = true;
+
         switch (oper) {
             case "=":
-                resultado = op1 == op2;
+                if ((op1.toString().startsWith("\"") && op1.toString().endsWith("\""))
+                    && op2.toString().startsWith("\"") && op2.toString().endsWith("\"")) {
+                    resultado = op1.toString().equals(op2.toString());
+                } else {
+                    resultado = Conversor.converteObjectDouble(op1) == Conversor.converteObjectDouble(op2);
+                }
                 break;
 
             case "<>":
-                resultado = op1 != op2;
+                resultado = Conversor.converteObjectDouble(op1) != Conversor.converteObjectDouble(op2);
                 break;
 
             case ">":
-                resultado = op1 > op2;
+                resultado = Conversor.converteObjectDouble(op1) > Conversor.converteObjectDouble(op2);
                 break;
 
             case ">=":
-                resultado = op1 >= op2;
+                resultado = Conversor.converteObjectDouble(op1) >= Conversor.converteObjectDouble(op2);
                 break;
 
             case "<":
-                resultado = op1 < op2;
+                resultado = Conversor.converteObjectDouble(op1) < Conversor.converteObjectDouble(op2);
                 break;
 
             case "<=":
-                resultado = op1 <= op2;
+                resultado = Conversor.converteObjectDouble(op1) <= Conversor.converteObjectDouble(op2);
                 break;
         }
         if (resultado == false) {

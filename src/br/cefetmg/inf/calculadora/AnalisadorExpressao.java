@@ -15,6 +15,7 @@ public final class AnalisadorExpressao {
     private static int contaAspas;
 
     private static Object elementoAtual;
+    private static Object elementoAnterior;
 
     private static EstruturaMemoria variaveis;
 
@@ -26,7 +27,6 @@ public final class AnalisadorExpressao {
 
         contaAbreParenteses = 0;
         contaFechaParenteses = 0;
-        contaAspas = 1;
 
         elementoAtual = null;
 
@@ -34,7 +34,7 @@ public final class AnalisadorExpressao {
 
         pCopia = new Pilha();
         pBase = pEntrada;
-        
+
         estado0();
 
         return pCopia;
@@ -52,7 +52,7 @@ public final class AnalisadorExpressao {
                 && (elementoAtual instanceof Double || elementoAtual instanceof Integer
                     || elementoAtual.equals("true") || elementoAtual.equals("false")
                     || elementoAtual.equals(")") || variaveis.procuraVariavel(elementoAtual.toString()) != null)
-                || (elementoAtual.equals("\"") && contaAspas == 2)) {
+                || (tipoElemento(elementoAtual).equals("string") && contaAspas == 2)) {
                 estadoFinal();
                 return;
             } else {
@@ -65,6 +65,7 @@ public final class AnalisadorExpressao {
 
     //Estado Inicial
     private static void estado0() throws ExcecaoExpressaoInvalida, ExcecaoPilhaVazia {
+        elementoAnterior = elementoAtual;
         recebeProximo();
 
         if (elementoAtual instanceof Double || elementoAtual instanceof Integer) {
@@ -77,7 +78,7 @@ public final class AnalisadorExpressao {
             estado4();
         } else if (elementoAtual.equals("not")) {
             estado5();
-        } else if (elementoAtual.equals("\"")) {
+        } else if (tipoElemento(elementoAtual).equals("string")) {
             estado10();
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
@@ -107,6 +108,8 @@ public final class AnalisadorExpressao {
     private static void estado2() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
         contaAbreParenteses++;
 
+        elementoAnterior = elementoAtual;
+
         recebeProximo();
 
         if (elementoAtual.equals("(")) {
@@ -121,12 +124,14 @@ public final class AnalisadorExpressao {
             estado5();
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
+        } else if (tipoElemento(elementoAtual).equals("string")) {
+            estado10();
         } else {
             estadoErro("Expressão:\n\telemento inválido após um '('");
         }
     }
 
-    //Estado 'true' || 'false'
+    //Estado operador booleano
     private static void estado3() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
         recebeProximo();
 
@@ -173,6 +178,7 @@ public final class AnalisadorExpressao {
 
     //Estado operador aritmético
     private static void estado6() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
+        elementoAnterior = elementoAtual;
         recebeProximo();
 
         if (elementoAtual instanceof Double || elementoAtual instanceof Integer) {
@@ -181,6 +187,8 @@ public final class AnalisadorExpressao {
             estado2();
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
+        } else if (tipoElemento(elementoAtual).equals("string") && elementoAnterior.equals("+")) {
+            estado10();
         } else {
             estadoErro("Expressão:\n\telemento inválido após operador aritmético binário");
         }
@@ -188,6 +196,7 @@ public final class AnalisadorExpressao {
 
     //Estado operador relacional
     private static void estado7() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
+        elementoAnterior = elementoAtual;
         recebeProximo();
 
         if (elementoAtual instanceof Double || elementoAtual instanceof Integer) {
@@ -196,6 +205,8 @@ public final class AnalisadorExpressao {
             estado2();
         } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
             estado1();
+        } else if (elementoAnterior.equals("=") && tipoElemento(elementoAtual).equals("string")) {
+            estado10();
         } else {
             estadoErro("Expressão:\n\telemento inválido após operador relacional");
         }
@@ -224,17 +235,10 @@ public final class AnalisadorExpressao {
 
     //Estado operador lógico
     private static void estado9() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
-        Object elementoAnterior = elementoAtual;
         recebeProximo();
 
         if (elementoAtual.equals("(")) {
             estado2();
-        } else if (elementoAtual.equals("true") || elementoAtual.equals("false")) {
-            estado3();
-        } else if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
-            estado1();
-        } else if (elementoAnterior.equals("=") && elementoAtual.equals("\"")) {
-            estado10();
         } else {
             estadoErro("Expressão:\n\telemento inválido após operador lógico");
         }
@@ -242,26 +246,33 @@ public final class AnalisadorExpressao {
 
     //Estado '"'
     private static void estado10() throws ExcecaoPilhaVazia, ExcecaoExpressaoInvalida {
-        String strCompleta = "";
+        String opAnterior = "";
         
-        do {
-            strCompleta += elementoAtual;
-            recebeProximo();
-            
-            if (terminaAutomato == true) {
-                return;
-            } else if (elementoAtual.equals("\"")) {
+        String[] vetStr = elementoAtual.toString().split("");
+        //
+        for (String posicaoAtual : vetStr) {
+            if (posicaoAtual.equals("\"")) {
                 contaAspas++;
             }
-        } while (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.ALFABETO)
-                 || (Dicionarios.procuraElementoNoDicionario(elementoAtual.toString(), Dicionarios.INTEIROS)
-                     || elementoAtual.equals("\"")));
+            if (!(Dicionarios.procuraElementoNoDicionario(posicaoAtual, Dicionarios.ALFABETO)
+                    || Dicionarios.procuraElementoNoDicionario(posicaoAtual, Dicionarios.INTEIROS)
+                    || posicaoAtual.equals("\""))) {
+                estadoErro("Expressão:\n\telemento inválido na string");
+            }
+        }
+        recebeProximo();
+        contaAspas = 0;
+        if (terminaAutomato == true) {
+            return;
+        }
         
-        if (elementoAtual.equals("=") || elementoAtual.equals("+")) {
-            pBase.empilha(strCompleta);
-            recebeProximo();
-            
-            estado10();
+        if ((elementoAnterior != null && elementoAtual.equals("=") && elementoAnterior.equals("="))
+            || (elementoAnterior == null && elementoAtual.equals("="))) {
+            estado7();
+        } else if (elementoAtual.equals("+")) {
+            estado6();
+        } else if (elementoAtual.equals(")")) {
+            estado8();
         } else {
             estadoErro("Expressão:\n\telemento inválido após string");
         }
@@ -274,15 +285,15 @@ public final class AnalisadorExpressao {
     private static void estadoErro(String mensagem) throws ExcecaoExpressaoInvalida {
         throw new ExcecaoExpressaoInvalida(mensagem);
     }
-    
+
     public static String tipoElemento(Object elemento) {
         String tipoElemento = "";
         if (elemento instanceof Integer) {
             tipoElemento = "int";
         } else if (elemento instanceof Double) {
             tipoElemento = "double";
-        } else if (elemento instanceof String 
-                && (((String) elemento).startsWith("\"") && ((String) elemento).endsWith("\""))) {
+        } else if (elemento instanceof String
+                   && (((String) elemento).startsWith("\"") && ((String) elemento).endsWith("\""))) {
             tipoElemento = "string";
         } else {
             //tipoElemento = "operador";
@@ -321,8 +332,8 @@ public final class AnalisadorExpressao {
             nomeProcede = false;
         } else {
             for (int i = 1; i < caracteresNome.length; i++) {
-                if (!(Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.INTEIROS) 
-                        || Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.ALFABETO))) {
+                if (!(Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.INTEIROS)
+                      || Dicionarios.procuraElementoNoDicionario(caracteresNome[0], Dicionarios.ALFABETO))) {
                     nomeProcede = false;
                 }
             }

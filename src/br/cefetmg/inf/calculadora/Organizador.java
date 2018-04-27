@@ -53,9 +53,11 @@ public final class Organizador {
                             && ((Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.ALFABETO)) 
                                 || (Dicionarios.procuraElementoNoDicionario(expressao[i], Dicionarios.INTEIROS)
                             || expressao[i].equals("\"")))) {
-                        pBase.empilha(expressao[i]);
+                        concatenador += expressao[i];
                         i++;
                     }
+                    pBase.empilha(concatenador);
+                    concatenador = "";
                 }
             } else if (expressao[i].equals("(") || expressao[i].equals(")")) {
                 pBase.empilha(expressao[i]);

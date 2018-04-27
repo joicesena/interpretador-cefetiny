@@ -8,7 +8,7 @@ import br.cefetmg.inf.tiny.memoria.Variavel;
 
 public class Resolvedor {
 
-    protected static boolean varConteudoVariavel;
+    protected static boolean varConteudoVariavel = false;
 
     protected static EstruturaMemoria variaveis = EstruturaMemoria.getInstancia();
 
@@ -56,10 +56,12 @@ public class Resolvedor {
         do {
             elementoAtual = pBase.desempilha();
             //
-            if (variaveis.procuraVariavel(elementoAtual.toString()) != null && !varConteudoVariavel) {
-                resultado = true;
-            } else {
-                throw new ExcecaoExpressaoInvalida("Expressão:\n\ta variável posssui ela mesma em seu conteúdo");
+            if (variaveis.procuraVariavel(elementoAtual.toString()) != null) {
+                if (varConteudoVariavel == false) {
+                    resultado = true;
+                } else {
+                    throw new ExcecaoExpressaoInvalida("Expressão:\n\ta variável posssui ela mesma em seu conteúdo");
+                }
             }
             pAux.empilha(elementoAtual);
         } while (pBase.pilhaVazia() == false);

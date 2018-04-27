@@ -11,19 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/analisador/Analisador.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/comandos/Comando.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/comandos/ComandoFor.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/comandos/ComandoReadInt.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/interfaceConsole/InterfaceConsole.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/excecoes/ExcecaoEntradaInvalida.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/Executor.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/analisador/AnalisadorSintatico.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/test/br/cefetmg/inf/tiny/TesteCefetiny.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/comandos/ComandoWhile.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/src/br/cefetmg/inf/tiny/executor/comandos/ComandoAtribuicao.java</file>
-            <file>file:/E:/MarkMyCode/Repositorios/interpretador-cefetiny/test/br/cefetmg/inf/tiny/arqTestes/teste1.txt</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
