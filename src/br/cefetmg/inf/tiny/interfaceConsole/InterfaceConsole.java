@@ -13,6 +13,9 @@ import br.cefetmg.inf.tiny.excecoes.ExcecaoFilaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoListaVazia;
 import br.cefetmg.inf.tiny.excecoes.ExcecaoPilhaVazia;
 
+//
+// FINALIZADO!!!
+//
 public class InterfaceConsole {
     
     public static void main(String[] args) {
