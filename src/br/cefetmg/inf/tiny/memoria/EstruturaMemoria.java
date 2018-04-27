@@ -22,23 +22,27 @@ public class EstruturaMemoria<Dado> {
     }
 
     public void armazenaVariavel(String nomeVar, Dado valorVar) throws ExcecaoExpressaoInvalida {
-        if (listaVazia()) {
-            // se a lista estiver vazia, essa é a primeira variável a ser armazenada (e a ultima)
-            primeiraVar = new Variavel(nomeVar, valorVar, determinaTipo(valorVar));
-            ultimaVar = primeiraVar;
-//            System.out.println("variável armazenada! " + primeiraVar.getNomeVar() + " := " + primeiraVar.getDado());
-            // a lista não está vazia
-        } else {
-            if (procuraVariavel(nomeVar) == null && !Dicionarios.procuraElementoNoDicionario(nomeVar, Dicionarios.LISTA_COMANDOS)) {
-                // essa variável ainda nao existe, deve ser criada
-                ultimaVar.setProxNodo(new Variavel(nomeVar, valorVar, determinaTipo(valorVar)));
-                Variavel temp = ultimaVar;
-                ultimaVar = temp.getProxNodo();
-//                System.out.println("variável armazenada! " + ultimaVar.getNomeVar() + " := " + ultimaVar.getDado());
+        if (!Dicionarios.procuraElementoNoDicionario(nomeVar, Dicionarios.LISTA_COMANDOS) &&
+            !Dicionarios.procuraElementoNoDicionario(nomeVar, Dicionarios.OP_ARITMETICOS) &&
+            !Dicionarios.procuraElementoNoDicionario(nomeVar, Dicionarios.OP_LOGICOS))       {
+            if (listaVazia()) {
+                // se a lista estiver vazia, essa é a primeira variável a ser armazenada (e a ultima)
+                primeiraVar = new Variavel(nomeVar, valorVar, determinaTipo(valorVar));
+                ultimaVar = primeiraVar;
+                // a lista não está vazia
             } else {
-                // a variável já existe. seu valor deve ser apenas alterado
-                alteraValorVariavel(nomeVar, valorVar);
+                    if (procuraVariavel(nomeVar) == null) {
+                        // essa variável ainda nao existe, deve ser criada
+                        ultimaVar.setProxNodo(new Variavel(nomeVar, valorVar, determinaTipo(valorVar)));
+                        Variavel temp = ultimaVar;
+                        ultimaVar = temp.getProxNodo();
+                    } else {
+                        // a variável já existe. seu valor deve ser apenas alterado
+                        alteraValorVariavel(nomeVar, valorVar);
+                    }
             }
+        } else {
+            throw new ExcecaoExpressaoInvalida ("Nome de variável inválido");
         }
     }
 
@@ -57,7 +61,6 @@ public class EstruturaMemoria<Dado> {
                 }
             }
         }
-//        System.out.println("Não foi possível encontrar a variável.");
         // retorna nulo: a variável não foi encontrada na memória
         return null;
     }
